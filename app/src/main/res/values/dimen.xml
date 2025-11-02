@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="primary_text_size">22sp</dimen>
+
+    <dimen name="rounding_of_bottom">16dp</dimen>
+    <dimen name="distance_between_bottom">16dp</dimen>
+    <dimen name="indentation_from_title">24dp</dimen>
+    <dimen name="screen_edge_indentation">16dp</dimen>
+    <dimen name="indentation_from_text">8dp</dimen>
+
+    <!--второй экран-->
+    <dimen name="distance_between_bottom_2">21dp</dimen>
+    <dimen name="screen_edge_indentation_2">16dp</dimen>
+    <dimen name="text_size_setting_activity">16sp</dimen>
+
+</resources>
