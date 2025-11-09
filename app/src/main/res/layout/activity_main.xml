@@ -51,7 +51,7 @@
             android:textAllCaps="false"
             android:textSize="@dimen/primary_text_size"
             app:cornerRadius="@dimen/rounding_of_bottom"
-            app:icon="@drawable/search"
+            app:icon="@drawable/ic_search_light_mode"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/indentation_from_text"
             app:iconTint="@color/black"
@@ -70,7 +70,7 @@
             android:text="@string/library"
             android:textColor="@color/black"
             android:textSize="@dimen/primary_text_size"
-            app:icon="@drawable/library"
+            app:icon="@drawable/ic_library_light_mode_24"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/indentation_from_text"
             app:iconTint="@color/black"/>
@@ -87,7 +87,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/primary_text_size"
             app:cornerRadius="@dimen/rounding_of_bottom"
-            app:icon="@drawable/setting"
+            app:icon="@drawable/ic_setting_light_mode_24"
             app:iconGravity="textStart"
             app:iconPadding="@dimen/indentation_from_text"
             app:iconTint="@color/black"/>

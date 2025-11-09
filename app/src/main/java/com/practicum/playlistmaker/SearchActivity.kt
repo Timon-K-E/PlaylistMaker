@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,5 +17,13 @@ class SearchActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val displayMainActivity = findViewById<Button>(R.id.back_screen_search)
+
+        displayMainActivity.setOnClickListener{
+            finish()
+        }
+
+
     }
 }
