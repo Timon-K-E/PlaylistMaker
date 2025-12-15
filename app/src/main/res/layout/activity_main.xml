@@ -4,26 +4,26 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue_main_screen"
     android:orientation="vertical"
+    android:theme="@style/Theme.PlaylistMaker"
+    android:background="?attr/colorPrimary"
     >
-<!--    android:paddingLeft="@dimen/screen_edge_indentation"-->
+
 
     <FrameLayout
+        style="@style/LinearLayoutHeader"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/screen_edge_indentation"
-        android:layout_marginRight="@dimen/screen_edge_indentation">
+        android:layout_marginRight="@dimen/screen_edge_indentation"
+        android:background="?attr/colorPrimary">
 
         <TextView
+            style="@style/TextViewtHeader"
             android:paddingTop="14dp"
             android:paddingBottom="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="@dimen/primary_text_size" />
+            android:background="?attr/colorPrimary"/>
     </FrameLayout>
 
 
@@ -31,66 +31,31 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/screen_edge_indentation"
+        style="@style/LinearLayoutContainerPadded"
         android:layout_marginRight="@dimen/screen_edge_indentation"
-
-
-        android:orientation="vertical">
+        android:background="?attr/colorPrimary">
 
         <Button
             android:id="@+id/search"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            style="@style/ButtonMain"
             android:layout_marginTop="@dimen/indentation_from_title"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:text="@string/search"
-            android:textColor="@color/black"
-            android:textAllCaps="false"
-            android:textSize="@dimen/primary_text_size"
-            app:cornerRadius="@dimen/rounding_of_bottom"
             app:icon="@drawable/ic_search_light_mode"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/indentation_from_text"
-            app:iconTint="@color/black"
-            />
+            android:text="@string/search"/>
 
         <Button
             android:id="@+id/library"
-            android:layout_width="match_parent"
+            style="@style/ButtonMain"
             android:layout_marginTop="@dimen/distance_between_bottom"
             android:layout_marginBottom="@dimen/distance_between_bottom"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            app:cornerRadius="@dimen/rounding_of_bottom"
-            android:backgroundTint="@color/white"
-            android:textAllCaps="false"
-            android:text="@string/library"
-            android:textColor="@color/black"
-            android:textSize="@dimen/primary_text_size"
             app:icon="@drawable/ic_library_light_mode_24"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/indentation_from_text"
-            app:iconTint="@color/black"/>
+            android:text="@string/library"/>
 
         <Button
             android:id="@+id/tools"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            style="@style/ButtonMain"
             android:layout_marginBottom="@dimen/distance_between_bottom"
-            android:layout_weight="1"
-            android:backgroundTint="@color/white"
-            android:textAllCaps="false"
-            android:text="@string/settings"
-            android:textColor="@color/black"
-            android:textSize="@dimen/primary_text_size"
-            app:cornerRadius="@dimen/rounding_of_bottom"
             app:icon="@drawable/ic_setting_light_mode_24"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/indentation_from_text"
-            app:iconTint="@color/black"/>
+            android:text="@string/settings"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -4,90 +4,59 @@
     android:id="@+id/main_setting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:orientation="vertical"
-    >
+    android:theme="@style/Theme.PlaylistMaker">>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/screen_edge_indentation"
+        style="@style/LinearLayoutHeader"
         android:paddingTop="14dp"
-        android:paddingBottom="24dp"
-        >
-
+        android:paddingBottom="24dp">
 
         <Button
-
             android:id="@+id/back"
+            style="@style/ButtonBack"
             android:layout_width="48dp"
             android:layout_height="wrap_content"
-
-            android:backgroundTint="@color/white"
-            android:stateListAnimator="@null"
+            app:backgroundTint="@color/black"
             app:icon="@drawable/ic_arrow_back_24"
-            app:iconPadding="16dp"
             app:iconGravity="textStart"
-            app:iconTint="@color/black" />
+            app:iconPadding="16dp" />
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            style="@style/TextViewtHeader"
             android:gravity="center"
-            android:text="@string/settings"
-            android:textColor="@color/black"
-            android:textSize="@dimen/primary_text_size" />
+            android:text="@string/settings" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/screen_edge_indentation"
-        android:orientation="vertical">
+    <LinearLayout style="@style/LinearLayoutContainerPadded">
 
 
         <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:paddingVertical="@dimen/distance_between_bottom_2"
             android:paddingRight="15dp"
             android:text="@string/stily_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_setting_activity"
-            android:checked="true"
-            />
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/text_size_setting_activity" />
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:paddingVertical="@dimen/distance_between_bottom_2"
-            android:paddingRight="@dimen/screen_edge_indentation_2"
-            android:backgroundTint="@color/white"
+            android:id="@+id/share"
+            style="@style/TextViewSettingItem"
             android:text="@string/share_app"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_setting_activity"
             app:drawableEndCompat="@drawable/ic_share_light_mode" />
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:paddingVertical="@dimen/distance_between_bottom_2"
-            android:paddingRight="@dimen/screen_edge_indentation_2"
-            android:backgroundTint="@color/white"
+            android:id="@+id/write_support"
+            style="@style/TextViewSettingItem"
             android:text="@string/contact_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_setting_activity"
             app:drawableEndCompat="@drawable/ic_support_light_mode_24" />
 
         <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:paddingVertical="@dimen/distance_between_bottom_2"
-            android:paddingRight="@dimen/screen_edge_indentation_2"
-            android:backgroundTint="@color/white"
+            android:id="@+id/user_agreement"
+            style="@style/TextViewSettingItem"
             android:text="@string/user_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_setting_activity"
             app:drawableEndCompat="@drawable/ic_arrow_forward_light_mode_24" />
 
     </LinearLayout>
