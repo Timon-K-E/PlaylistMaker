@@ -13,7 +13,7 @@
     <FrameLayout
         style="@style/LinearLayoutHeader"
         android:layout_width="match_parent"
-        android:layout_marginRight="@dimen/element_margin_16"
+        android:layout_marginEnd="@dimen/element_margin_16"
         android:background="?attr/colorPrimary">
 
         <TextView

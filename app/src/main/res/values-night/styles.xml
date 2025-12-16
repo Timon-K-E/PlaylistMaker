@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Стиль для кнопок главного экрана  -->
-    <style name="ButtonMain">
+    <style name="ButtonMain" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="iconTint">@color/black</item>
@@ -46,7 +46,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">@dimen/title_padding_top</item>
         <item name="android:paddingBottom">@dimen/title_padding_bottom</item>
-        <item name="android:layout_marginLeft">@dimen/element_margin_16</item>
+        <item name="android:layout_marginStart">@dimen/element_margin_16</item>
     </style>
 
     <!-- Стиль для текста контейнера заголовка экрана  -->

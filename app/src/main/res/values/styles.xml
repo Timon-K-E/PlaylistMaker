@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Стиль для кнопок главного экрана  -->
-    <style name="ButtonMain">
+    <style name="ButtonMain"  parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:backgroundTint">@color/white</item>
         <item name="android:textColor">@color/black</item>
         <item name="iconTint">@color/black</item>
