@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="primary_text_size">22sp</dimen>
 
-    <dimen name="rounding_of_bottom">16dp</dimen>
-    <dimen name="distance_between_bottom">16dp</dimen>
-    <dimen name="indentation_from_title">24dp</dimen>
-    <dimen name="screen_edge_indentation">16dp</dimen>
-    <dimen name="indentation_from_text">8dp</dimen>
+    <!-- Радиусы -->
+    <dimen name="radius_of_bottom">16dp</dimen>
+    <dimen name="radius_search_bar">8dp</dimen>
 
-    <!--второй экран-->
-    <dimen name="distance_between_bottom_2">21dp</dimen>
-    <dimen name="screen_edge_indentation_2">16dp</dimen>
-    <dimen name="text_size_setting_activity">16sp</dimen>
+    <!-- Размеры текста -->
+    <dimen name="text_size_title">22sp</dimen>
+    <dimen name="text_size_small">12sp</dimen>
+    <dimen name="text_size_normal">16sp</dimen>
+
+    <!-- Размер иконки назад -->
+    <dimen name="width_button_back">48dp</dimen>
+    <dimen name="padding_from_the_text_icon_back">16dp</dimen>
+
+    <!-- Размер высоты поиска -->
+    <dimen name="layout_height">36dp</dimen>
+
+    <!-- Размер отступов для заголовков -->
+    <dimen name="title_padding_top">14dp</dimen>
+    <dimen name="title_padding_bottom">16dp</dimen>
+
+    <!-- Размер отступов для switch -->
+    <dimen name="switch_padding_end">15dp</dimen>
+
+    <!-- Отступы между элементами -->
+    <dimen name="element_margin_8">8dp</dimen>
+    <dimen name="element_margin_16">16dp</dimen>
+    <dimen name="element_margin_24">24dp</dimen>
+
+    <!-- Отступы внутри элемента -->
+    <dimen name="element_padding_8">8dp</dimen>
+    <dimen name="element_padding_12">12dp</dimen>
+    <dimen name="element_padding_16">16dp</dimen>
+    <dimen name="element_padding_21">21dp</dimen>
+
+
 
 </resources>

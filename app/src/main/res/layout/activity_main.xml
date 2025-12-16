@@ -13,47 +13,40 @@
     <FrameLayout
         style="@style/LinearLayoutHeader"
         android:layout_width="match_parent"
-        android:layout_marginRight="@dimen/screen_edge_indentation"
+        android:layout_marginRight="@dimen/element_margin_16"
         android:background="?attr/colorPrimary">
 
         <TextView
             style="@style/TextViewtHeader"
-            android:paddingTop="14dp"
-            android:paddingBottom="16dp"
-            android:layout_gravity="start"
             android:text="@string/app_name"
             android:textColor="@color/white"
             android:background="?attr/colorPrimary"/>
     </FrameLayout>
 
 
-
-
-
     <LinearLayout
         style="@style/LinearLayoutContainerPadded"
-        android:layout_marginRight="@dimen/screen_edge_indentation"
         android:background="?attr/colorPrimary">
 
         <Button
             android:id="@+id/search"
             style="@style/ButtonMain"
-            android:layout_marginTop="@dimen/indentation_from_title"
+            android:layout_marginTop="@dimen/element_margin_24"
             app:icon="@drawable/ic_search_light_mode"
             android:text="@string/search"/>
 
         <Button
             android:id="@+id/library"
             style="@style/ButtonMain"
-            android:layout_marginTop="@dimen/distance_between_bottom"
-            android:layout_marginBottom="@dimen/distance_between_bottom"
+            android:layout_marginTop="@dimen/element_margin_16"
+            android:layout_marginBottom="@dimen/element_margin_16"
             app:icon="@drawable/ic_library_light_mode_24"
             android:text="@string/library"/>
 
         <Button
             android:id="@+id/tools"
             style="@style/ButtonMain"
-            android:layout_marginBottom="@dimen/distance_between_bottom"
+            android:layout_marginBottom="@dimen/element_margin_16"
             app:icon="@drawable/ic_setting_light_mode_24"
             android:text="@string/settings"/>
     </LinearLayout>

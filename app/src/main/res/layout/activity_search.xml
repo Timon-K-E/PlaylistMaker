@@ -5,54 +5,44 @@
         android:id="@+id/main_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:orientation="vertical"
         tools:context=".SearchActivity"
-        >
-
-
+        android:theme="@style/Theme.PlaylistMaker">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/screen_edge_indentation"
-        android:paddingTop="14dp"
-        android:paddingBottom="24dp"
-        >
-
+        style="@style/LinearLayoutHeader">
 
         <Button
-
             android:id="@+id/back_screen_search"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-
-            android:backgroundTint="@color/white"
-            android:stateListAnimator="@null"
-            app:icon="@drawable/ic_arrow_back_24"
-            app:iconPadding="16dp"
-            app:iconGravity="textStart"
-            app:iconTint="@color/black" />
-
-    </LinearLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/screen_edge_indentation"
-        android:layout_marginRight="@dimen/screen_edge_indentation"
-
-
-        android:orientation="vertical">
+            style="@style/ButtonBack"/>
 
         <TextView
-            android:id="@+id/message"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="@dimen/primary_text_size"
-            android:text="@string/placeholder_screen_search" />
+            style="@style/TextViewtHeader"
+            android:text="@string/search" />
+    </LinearLayout>
 
-    </FrameLayout>
+      <LinearLayout
+        android:id="@+id/search_field_container"
+        style="@style/LinearLayoutContainerPadded"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:radius="@dimen/radius_search_bar"
+        android:background="@drawable/search_field_background" >
+
+          <EditText
+              style="@style/searchBarText"
+              android:id="@+id/search_edit_text"
+              android:maxLines="1"
+              android:inputType="text"
+              android:hint="@string/search"
+              android:drawableStart="@drawable/ic_search_bar_16"/>
+
+          <ImageView
+              android:id="@+id/clear_button"
+              style="@style/clearButton"
+              android:src="@drawable/ic_search_clean_16"
+              android:visibility="gone" />
+    </LinearLayout>
+
+
 </LinearLayout>

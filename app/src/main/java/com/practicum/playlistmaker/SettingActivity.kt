@@ -21,7 +21,7 @@ class SettingActivity : AppCompatActivity() {
             insets
         }
 
-        val displayMainActivity = findViewById<Button>(R.id.back)
+        val displayMainActivity = findViewById<Button>(R.id.back_setting)
 
         displayMainActivity.setOnClickListener{
             finish()

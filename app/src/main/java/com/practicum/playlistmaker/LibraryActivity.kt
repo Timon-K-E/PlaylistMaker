@@ -17,12 +17,12 @@ class LibraryActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+        //кнопка назад
         val displayMainActivity = findViewById<Button>(R.id.back_screen_library)
-
         displayMainActivity.setOnClickListener{
             finish()
         }
+
 
     }
 }

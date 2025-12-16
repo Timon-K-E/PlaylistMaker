@@ -5,41 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:theme="@style/Theme.PlaylistMaker">>
+    android:theme="@style/Theme.PlaylistMaker">
 
     <LinearLayout
-        style="@style/LinearLayoutHeader"
-        android:paddingTop="14dp"
-        android:paddingBottom="24dp">
+        style="@style/LinearLayoutHeader">
 
         <Button
-            android:id="@+id/back"
-            style="@style/ButtonBack"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            app:backgroundTint="@color/black"
-            app:icon="@drawable/ic_arrow_back_24"
-            app:iconGravity="textStart"
-            app:iconPadding="16dp" />
+            android:id="@+id/back_setting"
+            style="@style/ButtonBack"/>
 
         <TextView
             style="@style/TextViewtHeader"
-            android:gravity="center"
             android:text="@string/settings" />
     </LinearLayout>
 
-    <LinearLayout style="@style/LinearLayoutContainerPadded">
+    <LinearLayout
+        style="@style/LinearLayoutContainerPadded">
 
 
-        <Switch
+        <androidx.appcompat.widget.SwitchCompat
+            style="@style/ButtonSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:paddingVertical="@dimen/distance_between_bottom_2"
-            android:paddingRight="15dp"
-            android:text="@string/stily_theme"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="@dimen/text_size_setting_activity" />
+            android:paddingVertical="@dimen/element_padding_21"
+            android:text="@string/stile_theme"
+            android:textSize="@dimen/text_size_normal"
+            />
+
 
         <TextView
             android:id="@+id/share"
