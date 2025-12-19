@@ -12,11 +12,15 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.RecyclerView
 
 
 class SearchActivity : AppCompatActivity() {
 
     private var savedSearchText: String = EMPTY_STRING
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var  trackAdepter: TrackAdepter
+    private lateinit var trackList: List<Track>
 
     companion object {
         const val SAVE_TEXT_KEY = "SAVE_TEXT_KEY"
@@ -54,6 +58,12 @@ class SearchActivity : AppCompatActivity() {
         val searchEditText = findViewById<EditText>(R.id.search_edit_text)
         val clearButton = findViewById<ImageView>(R.id.clear_button)
 
+        recyclerView = findViewById(R.id.recycler_view_track)
+        trackList = createTrackList()
+        trackAdepter = TrackAdepter(trackList)
+        recyclerView.adapter =trackAdepter
+
+
         //подставляем в поле данные
         searchEditText.setText(savedSearchText)
         // обновление видимости кнопки
@@ -90,6 +100,41 @@ class SearchActivity : AppCompatActivity() {
         })
 
         showKeyboard(searchEditText)
+    }
+
+    private fun createTrackList(): List<Track> {
+        return listOf(
+            Track(
+                getString(R.string.track_name_1),
+                getString(R.string.track_artist_1),
+                getString(R.string.track_time_1),
+                getString(R.string.track_url_1)
+            ),
+            Track(
+                getString(R.string.track_name_2),
+                getString(R.string.track_artist_2),
+                getString(R.string.track_time_2),
+                getString(R.string.track_url_2)
+            ),
+            Track(
+                getString(R.string.track_name_3),
+                getString(R.string.track_artist_3),
+                getString(R.string.track_time_3),
+                getString(R.string.track_url_3)
+            ),
+            Track(
+                getString(R.string.track_name_4),
+                getString(R.string.track_artist_4),
+                getString(R.string.track_time_4),
+                getString(R.string.track_url_4)
+            ),
+            Track(
+                getString(R.string.track_name_5),
+                getString(R.string.track_artist_5),
+                getString(R.string.track_time_5),
+                getString(R.string.track_url_5)
+            )
+        )
     }
 
     private fun showKeyboard(editText: EditText) {
