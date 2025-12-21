@@ -4,11 +4,17 @@
     <!-- Радиусы -->
     <dimen name="radius_of_bottom">16dp</dimen>
     <dimen name="radius_search_bar">8dp</dimen>
+    <!-- Звкругление обложки трека -->
+    <dimen name="track_cover_corner_radius">2dp</dimen>
+
 
     <!-- Размеры текста -->
     <dimen name="text_size_title">22sp</dimen>
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size_normal">16sp</dimen>
+    <dimen name="text_size_artist_name">11sp</dimen>
+    <!-- Длина текста имени исполнителя -->
+    <dimen name="track_artist_width">54dp</dimen>
 
     <!-- Размер иконки назад -->
     <dimen name="width_button_back">48dp</dimen>
@@ -25,9 +31,13 @@
     <dimen name="switch_padding_end">15dp</dimen>
 
     <!-- Отступы между элементами -->
+    <dimen name="element_margin_1">1dp</dimen>
     <dimen name="element_margin_8">8dp</dimen>
+    <dimen name="element_margin_12">12dp</dimen>
+    <dimen name="element_margin_13">13dp</dimen>
     <dimen name="element_margin_16">16dp</dimen>
     <dimen name="element_margin_24">24dp</dimen>
+    <dimen name="track_cover_margin_size">45dp</dimen>
 
     <!-- Отступы внутри элемента -->
     <dimen name="element_padding_8">8dp</dimen>
