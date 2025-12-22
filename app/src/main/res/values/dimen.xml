@@ -2,16 +2,19 @@
 <resources>
 
     <!-- Радиусы -->
-    <dimen name="radius_of_bottom">16dp</dimen>
+    <dimen name="radius_of_bottom_16">16dp</dimen>
     <dimen name="radius_search_bar">8dp</dimen>
+    <dimen name="radius_of_bottom_54">54dp</dimen>
     <!-- Звкругление обложки трека -->
     <dimen name="track_cover_corner_radius">2dp</dimen>
 
 
     <!-- Размеры текста -->
-    <dimen name="text_size_title">22sp</dimen>
-    <dimen name="text_size_small">12sp</dimen>
-    <dimen name="text_size_normal">16sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_19">19sp</dimen>
     <dimen name="text_size_artist_name">11sp</dimen>
     <!-- Длина текста имени исполнителя -->
     <dimen name="track_artist_width">54dp</dimen>

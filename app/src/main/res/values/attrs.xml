@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="switchTrackColorChecked" format="color|reference"/>
+    <attr name="switchTrackColorUnchecked" format="color|reference"/>
+    <attr name="switchThumbColorChecked" format="color|reference"/>
+    <attr name="switchThumbColorUnchecked" format="color|reference"/>
+</resources>

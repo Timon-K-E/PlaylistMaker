@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/element_margin_1"
-            android:textSize="@dimen/text_size_normal"
+            android:textSize="@dimen/text_size_16"
             android:fontFamily="@font/ys_display_regular"
             android:maxLines="1"
             android:textColor="?attr/colorOnSurface"
@@ -49,8 +49,9 @@
 
             <TextView
                 android:id="@+id/ArtistName"
-                android:layout_width="@dimen/track_artist_width"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:textSize="@dimen/text_size_artist_name"
                 android:fontFamily="@font/ys_display_regular"
                 android:textColor="?attr/colorOnSurfaceVariant"

@@ -30,7 +30,7 @@
             android:checked="true"
             android:paddingVertical="@dimen/element_padding_21"
             android:text="@string/stile_theme"
-            android:textSize="@dimen/text_size_normal"
+            android:textSize="@dimen/text_size_16"
             />
 
 
