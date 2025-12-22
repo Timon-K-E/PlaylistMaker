@@ -73,8 +73,10 @@
 
     <!-- Стиль swith  -->
     <style name="ButtonSwitch">
-        <item name="trackTint">@color/track_color_selector_light</item>
-        <item name="thumbTint">@color/thumb_color_selector_light</item>
+<!--        <item name="trackTint">@color/track_color_selector_light</item>-->
+<!--        <item name="thumbTint">@color/thumb_color_selector_light</item>-->
+        <item name="thumbTint">@color/thumb_color_selector</item>
+        <item name="trackTint">@color/track_color_selector</item>
         <item name="android:textColor">@color/black</item>
     </style>
 

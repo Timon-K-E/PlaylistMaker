@@ -8,5 +8,13 @@
         <item name="colorOnSurface">@color/white</item>
         <item name="colorOnSurfaceVariant">@color/white</item>
         <item name="android:background">@color/black</item>
+
+        <item name="switchTrackColorChecked">@color/track_color_selector_night</item>
+        <item name="switchThumbColorChecked">@color/thumb_color_selector_night</item>
+        <item name="switchTrackColorUnchecked">@color/gray_bg_search</item>
+        <item name="switchThumbColorUnchecked">@color/gray</item>
+
+
+
     </style>
 </resources>
