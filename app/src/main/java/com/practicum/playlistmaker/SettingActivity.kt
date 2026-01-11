@@ -66,5 +66,11 @@ class SettingActivity : AppCompatActivity() {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(browserIntent)
         }
+
+        val themeSwitch = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.themeSwitcher)
+        themeSwitch.isChecked = (applicationContext as App).darkTheme
+        themeSwitch.setOnCheckedChangeListener { swither, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
     }
 }

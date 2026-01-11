@@ -93,7 +93,7 @@
         <item name="android:paddingStart">@dimen/element_padding_12</item>
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="fontFamily">@font/ys_display_regular</item>
-    </style>
+   </style>
 
     <!-- Стиль кнопки очистки строки поиска  -->
     <style name="clearButton">

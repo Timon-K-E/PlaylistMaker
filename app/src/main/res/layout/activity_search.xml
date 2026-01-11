@@ -36,7 +36,8 @@
               android:hint="@string/search"
               android:inputType="text"
               android:maxLines="1"
-              android:textCursorDrawable="@drawable/cursor" />
+              android:textCursorDrawable="@drawable/ic_cursor"
+              />
 
           <ImageView
               android:id="@+id/clear_button"
