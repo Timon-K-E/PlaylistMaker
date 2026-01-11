@@ -105,8 +105,12 @@
         <item name="android:layout_marginEnd">@dimen/element_margin_8</item>
     </style>
 
-
-
-
+    <!-- Стиль кнопки очистки истории поиска  -->
+    <style name="clearButtonHistory">
+        <item name="cornerRadius">@dimen/radius_of_bottom_54</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:backgroundTint">?attr/colorOnSurface</item>
+        <item name="android:textColor">?attr/colorSurface</item>
+    </style>
 </resources>
 

@@ -10,11 +10,11 @@
 
 
     <!-- Размеры текста -->
-    <dimen name="text_size_22">22sp</dimen>
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_19">19sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
     <dimen name="text_size_artist_name">11sp</dimen>
     <!-- Длина текста имени исполнителя -->
     <dimen name="track_artist_width">54dp</dimen>
@@ -23,8 +23,10 @@
     <dimen name="width_button_back">48dp</dimen>
     <dimen name="padding_from_the_text_icon_back">16dp</dimen>
 
-    <!-- Размер высоты поиска -->
+    <!-- Размер высоты -->
     <dimen name="layout_height">36dp</dimen>
+    <dimen name="layout_height_52">52dp</dimen>
+
 
     <!-- Размер отступов для заголовков -->
     <dimen name="title_padding_top">14dp</dimen>

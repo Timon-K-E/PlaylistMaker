@@ -21,6 +21,7 @@ class SettingActivity : AppCompatActivity() {
             insets
         }
 
+        val app = applicationContext as App
         val displayMainActivity = findViewById<Button>(R.id.back_setting)
 
         displayMainActivity.setOnClickListener{
@@ -68,9 +69,9 @@ class SettingActivity : AppCompatActivity() {
         }
 
         val themeSwitch = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.themeSwitcher)
-        themeSwitch.isChecked = (applicationContext as App).darkTheme
+        themeSwitch.isChecked = app.darkTheme
         themeSwitch.setOnCheckedChangeListener { swither, checked ->
-            (applicationContext as App).switchTheme(checked)
+            app.switchTheme(checked)
         }
     }
 }
