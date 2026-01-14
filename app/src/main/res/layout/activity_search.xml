@@ -36,7 +36,8 @@
               android:hint="@string/search"
               android:inputType="text"
               android:maxLines="1"
-              android:textCursorDrawable="@drawable/cursor" />
+              android:textCursorDrawable="@drawable/ic_cursor"
+              />
 
           <ImageView
               android:id="@+id/clear_button"
@@ -55,6 +56,49 @@
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/element_margin_16"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <LinearLayout
+            android:id="@+id/search_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/layout_height_52"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/element_margin_24"
+                android:fontFamily="@font/ys_display_medium"
+                android:gravity="center"
+                android:text="@string/you_were_looking_for"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="@dimen/text_size_19" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_history"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+                <Button
+                    android:id="@+id/clear_button_history"
+                    style="@style/clearButtonHistory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center"
+                    android:fontFamily="@font/ys_display_medium"
+                    android:textSize="@dimen/text_size_14"
+                    android:text="@string/clear_history" />
+
+        </LinearLayout>
+
+
 
 
         <LinearLayout
@@ -92,7 +136,7 @@
             android:layout_marginStart="@dimen/element_margin_24"
             android:layout_marginEnd="@dimen/element_margin_24"
             android:visibility="gone"
-            tools:visibility="visible">
+            tools:visibility="invisible">
 
             <!-- ЗАГЛУШКА: ОШИБКА СЕТИ  -->
             <ImageView

@@ -28,6 +28,11 @@
     <string name="stub_artist_name">Имя Артистааааааааааааааааааааааааааааааааааааааааааааааааааа</string>
     <string name="stub_track_time">04:011111111111</string>
 
+    <!-- Для задания 12 -->
+    <string name="you_were_looking_for">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
+
+
     <!-- Треки -->
 <!--    <string name="track_name_1">Smells like Teen Spirit</string>-->
 <!--    <string name="track_artist_1">Nirvana</string>-->

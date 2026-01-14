@@ -25,9 +25,10 @@
 
         <androidx.appcompat.widget.SwitchCompat
             style="@style/ButtonSwitch"
+            android:id="@+id/themeSwitcher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
+            android:checked="false"
             android:paddingVertical="@dimen/element_padding_21"
             android:text="@string/stile_theme"
             android:textSize="@dimen/text_size_16"

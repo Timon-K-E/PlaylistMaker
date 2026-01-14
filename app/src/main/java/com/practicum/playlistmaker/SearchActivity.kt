@@ -17,6 +17,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import androidx.core.widget.doOnTextChanged
 import android.view.inputmethod.EditorInfo
+import android.content.Context
+import android.widget.Toast
+import androidx.core.view.isVisible
+import com.google.gson.Gson
 
 
 class SearchActivity : AppCompatActivity() {
@@ -27,6 +31,10 @@ class SearchActivity : AppCompatActivity() {
 
     // Список треков для отображения в RecyclerView
     private val trackList = mutableListOf<Track>()
+    //  История поиска
+    private lateinit var searchHistory: SearchHistory
+    private lateinit var historyAdapter: TrackAdapter
+    private var historyList = mutableListOf<Track>()
 
     // UI КОМПОНЕНТЫ
     // Основные элементы интерфейса
@@ -40,10 +48,16 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderNetworkError: LinearLayout
     private lateinit var refreshButton: Button
 
+    // Элементы истории
+    private lateinit var historyLayout: LinearLayout
+    private lateinit var historyRecyclerView: RecyclerView
+    private lateinit var clearHistoryButton: Button
+
     //  КОНСТАНТЫ
     companion object {
         private const val SAVE_TEXT_KEY = "SAVE_TEXT_KEY"
         private const val EMPTY_STRING = ""
+        private const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
     }
 
     // ЖИЗНЕННЫЙ ЦИКЛ
@@ -60,6 +74,10 @@ class SearchActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search)
         initializeViews()// 1. Инициализация всех View элементов
         setupSystemInsets()// 2. Настройка отступов для системных панелей
+
+        val sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, Context.MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPrefs, Gson())
+
         restoreSavedState(savedInstanceState)// 3. Восстановление состояния при повороте экрана
         setupRecyclerView()// 4. Настройка адаптера для RecyclerView
         setupViewListeners()// 5. Настройка всех слушателей событий
@@ -76,13 +94,33 @@ class SearchActivity : AppCompatActivity() {
         placeholderNothingFound = findViewById(R.id.placeholder_nothing_found)// Плейсхолдер "Ничего не найдено"
         placeholderNetworkError = findViewById(R.id.placeholder_network_error)// Плейсхолдер "Ошибка сети"
         refreshButton = findViewById(R.id.refresh_button)// Кнопка "Обновить" при ошибке сети
+
+        historyLayout = findViewById(R.id.search_history)
+        historyRecyclerView = findViewById(R.id.recycler_view_history)
+        clearHistoryButton = findViewById(R.id.clear_button_history)
     }
 
      // Настройка адаптера для RecyclerView
-    private fun setupRecyclerView() {
-        trackAdapter = TrackAdapter(trackList)
-        recyclerView.adapter = trackAdapter
-    }
+     private fun setupRecyclerView() {
+         // обработчик клика для добавления в историю
+         trackAdapter = TrackAdapter(trackList) { track ->
+             searchHistory.add(track) // Добавляем трек в историю
+             Toast.makeText(
+                 this, "Трек добавлен в историю", Toast.LENGTH_SHORT
+             ).show()
+         }
+         recyclerView.adapter = trackAdapter
+
+         // Инициализация адаптера истории
+         historyAdapter = TrackAdapter(historyList) { track ->
+             // При клике на трек в истории также добавляем его в историю (обновляем позицию)
+             searchHistory.add(track)
+             // Обновляем список истории после добавления
+             updateHistoryList()
+         }
+         historyRecyclerView.adapter = historyAdapter
+
+     }
 
     // Настройка отступов для системных панелей (статусной и навигационной)
     private fun setupSystemInsets() {
@@ -117,6 +155,7 @@ class SearchActivity : AppCompatActivity() {
         setupTextChangeListeners()
         setupKeyboardDoneListener()
         setupRefreshButtonListener()
+        setupClearHistoryButtonListener()
     }
 
     // Настройка слушателя для кнопки "Назад"
@@ -139,19 +178,47 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupClearHistoryButtonListener() {
+        clearHistoryButton.setOnClickListener {
+            searchHistory.clear() // Очищаем историю в SharedPreferences
+            historyList.clear() // Очищаем локальный список
+            historyAdapter.notifyDataSetChanged() // Обновляем адаптер
+            historyLayout.isVisible = false // Скрываем блок истории
+        }
+    }
+
+
     // Настройка слушателей изменения текста в поле поиска
     private fun setupTextChangeListeners() {
-        // Kotlin-стиль: обработка изменений текста
         searchEditText.doOnTextChanged { text, _, _, _ ->
             // Обновление видимости кнопки очистки
             clearButton.visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
             // Сохранение текста для восстановления состояния
             savedSearchText = text?.toString() ?: ""
-            // Если поле пустое, показываем состояние "очищено"
+
+            //  Логика показа истории при пустом поле
             if (text.isNullOrEmpty()) {
+                // Если поле пустое и есть история - показываем историю
+                if (searchHistory.read().isNotEmpty()) {
+                    updateHistoryList() // Обновляем список истории
+                    showHistory()
+                } else {
+                    hideHistory() // Скрываем историю, если она пустая
+                }
                 updateUIState(SearchResult.NO_RESULTS_OR_CLEAR)
+            } else {
+                hideHistory() // Если есть текст - скрываем историю
             }
         }
+
+        // Показ истории при фокусе на поле ввода
+        searchEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && searchEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) {
+                updateHistoryList() // Обновляем список истории
+                showHistory() // Показываем историю
+            }
+        }
+
         // Показ клавиатуры при клике на поле ввода
         searchEditText.setOnClickListener {
             showSoftKeyboardFor(searchEditText)
@@ -185,6 +252,7 @@ class SearchActivity : AppCompatActivity() {
     // УПРАВЛЕНИЕ КЛАВИАТУРОЙ
     // Показать клавиатуру для указанного EditText
     private fun showSoftKeyboardFor(editText: EditText) {
+        editText.requestFocus()
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
     }
@@ -251,7 +319,7 @@ class SearchActivity : AppCompatActivity() {
 
     // Управление видимостью UI элементов в зависимости от состояния
     private fun updateUIState(result: SearchResult) {
-        hideAllUIStates()// Сначала скрываем все возможные состояния
+        hideAllUIStates() // Сначала скрываем все возможные состояния
         // Включаем только нужные элементы для текущего состояния
         when (result) {
             SearchResult.SUCCESS -> {
@@ -268,39 +336,63 @@ class SearchActivity : AppCompatActivity() {
 
             SearchResult.NO_RESULTS_OR_CLEAR -> {
                 resetSearchUI()
+                // При очистке проверяем, нужно ли показать историю
+                if (searchEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) {
+                    updateHistoryList() // Обновляем список истории
+                    showHistory() // Показываем историю
+                } else {
+                    hideHistory() // Скрываем историю
+                }
             }
         }
     }
 
      // Скрытие всех UI элементов состояний
     private fun hideAllUIStates() {
-        recyclerView.visibility = View.GONE
-        placeholderNothingFound.visibility = View.GONE
-        placeholderNetworkError.visibility = View.GONE
+         recyclerView.isVisible = false
+         placeholderNothingFound.isVisible = false
+         placeholderNetworkError.isVisible = false
     }
 
      // Показать список с результатами поиска
     private fun displaySearchResults() {
-        recyclerView.visibility = View.VISIBLE
+         recyclerView.isVisible = true
     }
 
     // Показать состояние "Ничего не найдено"
     private fun displayEmptyState() {
         trackList.clear()
         trackAdapter.notifyDataSetChanged()
-        placeholderNothingFound.visibility = View.VISIBLE
+        placeholderNothingFound.isVisible = true
     }
 
      // Показать состояние "Ошибка сети"
     private fun displayNetworkErrorState() {
         trackList.clear()
         trackAdapter.notifyDataSetChanged()
-        placeholderNetworkError.visibility = View.VISIBLE
+         placeholderNetworkError.isVisible = true
     }
 
      // Очистить результаты поиска
     private fun resetSearchUI() {
         trackList.clear()
         trackAdapter.notifyDataSetChanged()
+    }
+
+    // Обновление списка истории из SharedPreferences
+    private fun updateHistoryList() {
+        historyList.clear()
+        historyList.addAll(searchHistory.read())
+        historyAdapter.notifyDataSetChanged()
+    }
+
+    // Показать блок истории
+    private fun showHistory() {
+        historyLayout.isVisible = true
+    }
+
+    // Скрыть блок истории
+    private fun hideHistory() {
+        historyLayout.isVisible = false
     }
 }

@@ -21,6 +21,7 @@ class SettingActivity : AppCompatActivity() {
             insets
         }
 
+        val app = applicationContext as App
         val displayMainActivity = findViewById<Button>(R.id.back_setting)
 
         displayMainActivity.setOnClickListener{
@@ -65,6 +66,12 @@ class SettingActivity : AppCompatActivity() {
             val url = getString(R.string.user_agreement_url)
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(browserIntent)
+        }
+
+        val themeSwitch = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.themeSwitcher)
+        themeSwitch.isChecked = app.darkTheme
+        themeSwitch.setOnCheckedChangeListener { swither, checked ->
+            app.switchTheme(checked)
         }
     }
 }
