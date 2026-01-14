@@ -19,6 +19,7 @@ import androidx.core.widget.doOnTextChanged
 import android.view.inputmethod.EditorInfo
 import android.content.Context
 import android.widget.Toast
+import androidx.core.view.isVisible
 import com.google.gson.Gson
 
 
@@ -182,7 +183,7 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.clear() // Очищаем историю в SharedPreferences
             historyList.clear() // Очищаем локальный список
             historyAdapter.notifyDataSetChanged() // Обновляем адаптер
-            historyLayout.visibility = View.GONE // Скрываем блок истории
+            historyLayout.isVisible = false // Скрываем блок истории
         }
     }
 
@@ -348,28 +349,28 @@ class SearchActivity : AppCompatActivity() {
 
      // Скрытие всех UI элементов состояний
     private fun hideAllUIStates() {
-        recyclerView.visibility = View.GONE
-        placeholderNothingFound.visibility = View.GONE
-        placeholderNetworkError.visibility = View.GONE
+         recyclerView.isVisible = false
+         placeholderNothingFound.isVisible = false
+         placeholderNetworkError.isVisible = false
     }
 
      // Показать список с результатами поиска
     private fun displaySearchResults() {
-        recyclerView.visibility = View.VISIBLE
+         recyclerView.isVisible = true
     }
 
     // Показать состояние "Ничего не найдено"
     private fun displayEmptyState() {
         trackList.clear()
         trackAdapter.notifyDataSetChanged()
-        placeholderNothingFound.visibility = View.VISIBLE
+        placeholderNothingFound.isVisible = true
     }
 
      // Показать состояние "Ошибка сети"
     private fun displayNetworkErrorState() {
         trackList.clear()
         trackAdapter.notifyDataSetChanged()
-        placeholderNetworkError.visibility = View.VISIBLE
+         placeholderNetworkError.isVisible = true
     }
 
      // Очистить результаты поиска
@@ -387,11 +388,11 @@ class SearchActivity : AppCompatActivity() {
 
     // Показать блок истории
     private fun showHistory() {
-        historyLayout.visibility = View.VISIBLE
+        historyLayout.isVisible = true
     }
 
     // Скрыть блок истории
     private fun hideHistory() {
-        historyLayout.visibility = View.GONE
+        historyLayout.isVisible = false
     }
 }
