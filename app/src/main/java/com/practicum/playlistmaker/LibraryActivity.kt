@@ -14,7 +14,7 @@ class LibraryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_library)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_library)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            v.setPadding(systemBars.left, systemBars.top/2, systemBars.right, systemBars.bottom)
             insets
         }
         //кнопка назад

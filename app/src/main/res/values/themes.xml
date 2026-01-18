@@ -13,7 +13,8 @@
 
         <item name="colorOnSurfaceVariant">@color/gray</item>
 
-        <item name="android:background">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+
 
                             <!--Для switch (меняется при тёмной теме)-->
         <item name="switchTrackColorChecked">@color/track_color_selector_light</item>

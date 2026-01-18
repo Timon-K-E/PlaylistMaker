@@ -7,6 +7,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".SearchActivity"
+        android:background="?attr/colorSurface"
         android:theme="@style/Theme.PlaylistMaker">
 
     <LinearLayout
@@ -26,7 +27,7 @@
         style="@style/LinearLayoutContainerPadded"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:radius="@dimen/radius_search_bar"
+        android:radius="@dimen/radius_size_8"
         android:background="@drawable/ic_search_field_background" >
 
           <EditText
@@ -179,7 +180,7 @@
                 android:textSize="@dimen/text_size_14"
                 android:textColor="?attr/colorSurface"
                 android:backgroundTint="?attr/colorOnSurface"
-                app:cornerRadius="@dimen/radius_of_bottom_54"
+                app:cornerRadius="@dimen/radius_size_54"
                 />
 
         </LinearLayout>
