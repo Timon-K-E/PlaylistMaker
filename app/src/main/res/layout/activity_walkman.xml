@@ -18,15 +18,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/element_margin_24"
-        app:layout_constraintHeight_max="wrap"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="wrap"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/back_screen_walkman">
 
@@ -50,7 +49,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="@dimen/element_margin_24" />
-
 
 
             <ImageView
@@ -97,10 +95,10 @@
                 android:background="@drawable/ic_circle_background_54"
                 android:scaleType="center"
                 android:src="@drawable/ic_add_to_playlist_23"
-                app:layout_constraintStart_toStartOf="@id/leftGuideline"
                 app:layout_constraintBottom_toBottomOf="@id/playButton"
-                app:layout_constraintTop_toTopOf="@id/playButton"
-                app:layout_constraintDimensionRatio="1:1"/>
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="@id/leftGuideline"
+                app:layout_constraintTop_toTopOf="@id/playButton" />
 
 
             <ImageButton
@@ -124,9 +122,9 @@
                 android:scaleType="center"
                 android:src="@drawable/ic_favorite_border_25_23"
                 app:layout_constraintBottom_toBottomOf="@id/playButton"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-                app:layout_constraintTop_toTopOf="@id/playButton"
-                app:layout_constraintDimensionRatio="1:1"/>
+                app:layout_constraintTop_toTopOf="@id/playButton" />
 
             <TextView
                 android:id="@+id/timePlay"
@@ -149,10 +147,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/element_margin_30"
                 android:layout_marginBottom="@dimen/element_margin_16"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/timePlay"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/timePlay">
 
 
                 <TextView
