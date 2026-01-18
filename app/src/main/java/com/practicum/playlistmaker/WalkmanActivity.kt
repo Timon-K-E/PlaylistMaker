@@ -32,7 +32,7 @@ class WalkmanActivity : AppCompatActivity(){
                 finish()
             }
 
-            val track = intent.getParcelableExtra<Track>("track")
+            val track = intent.getParcelableExtra<Track>(IntentKeys.TRACK)
 
             if (track == null) {
                 finish()

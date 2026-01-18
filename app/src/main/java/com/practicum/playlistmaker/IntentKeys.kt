@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker
 
 object IntentKeys {
+    const val TRACK = "track"
     const val TRACK_NAME = "trackName"
     const val ARTIST_NAME = "artistName"
     const val TRACK_TIME = "trackTimeMillis"
