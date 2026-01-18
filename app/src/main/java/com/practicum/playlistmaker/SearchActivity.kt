@@ -130,14 +130,15 @@ class SearchActivity : AppCompatActivity() {
 
     private fun openPlayerScreen(track: Track) {
         val intent = Intent(this, WalkmanActivity::class.java).apply {
-            putExtra("trackName", track.trackName)
-            putExtra("artistName", track.artistName)
-            putExtra("trackTimeMillis", track.trackTimeMillis)
-            putExtra("artworkUrl100", track.artworkUrl100)
-            putExtra("collectionName", track.collectionName)
-            putExtra("releaseDate", track.releaseDate)
-            putExtra("country", track.country)
-            putExtra("primaryGenreName", track.primaryGenreName)
+//            putExtra("trackName", track.trackName)
+//            putExtra("artistName", track.artistName)
+//            putExtra("trackTimeMillis", track.trackTimeMillis)
+//            putExtra("artworkUrl100", track.artworkUrl100)
+//            putExtra("collectionName", track.collectionName)
+//            putExtra("releaseDate", track.releaseDate)
+//            putExtra("country", track.country)
+//            putExtra("primaryGenreName", track.primaryGenreName)
+            putExtra("track", track)
         }
         startActivity(intent)
     }

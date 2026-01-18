@@ -32,14 +32,12 @@ class WalkmanActivity : AppCompatActivity(){
                 finish()
             }
 
-            val trackName = intent.getStringExtra("trackName") ?: ""
-            val artistName = intent.getStringExtra("artistName") ?: ""
-            val trackTimeMillis = intent.getLongExtra("trackTimeMillis", 0L)
-            val artworkUrl100 = intent.getStringExtra("artworkUrl100") ?: ""
-            val collectionName = intent.getStringExtra("collectionName") ?: ""
-            val releaseDate = intent.getStringExtra("releaseDate") ?: ""
-            val country = intent.getStringExtra("country") ?: ""
-            val primaryGenreName = intent.getStringExtra("primaryGenreName") ?: ""
+            val track = intent.getParcelableExtra<Track>("track")
+
+            if (track == null) {
+                finish()
+                return
+            }
 
             val albumCover = findViewById<ImageView>(R.id.albumCover)
             val songTitle = findViewById<TextView>(R.id.songTitle)
@@ -55,23 +53,23 @@ class WalkmanActivity : AppCompatActivity(){
             val yearLabel = findViewById<TextView>(R.id.yearLabel)
 
 
-            songTitle.text = trackName
-            artistNameView.text = artistName
+            songTitle.text = track.trackName
+            artistNameView.text = track.artistName
 
 
-            val formattedTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
+            val formattedTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
             timePlay.text = formattedTime
             durationValue.text = formattedTime
 
-            setupMetadataField(albumLabel, albumValue, collectionName, "album")
-            setupMetadataField(yearLabel, yearValue, releaseDate, "year")
+            setupMetadataField(albumLabel, albumValue, track.collectionName, "album")
+            setupMetadataField(yearLabel, yearValue, track.releaseDate, "year")
 
 
 
-            albumValue.text = collectionName
+            albumValue.text = track.collectionName
 
-            if (releaseDate.isNotEmpty()) {
-                val year = Instant.parse(releaseDate)
+            if (track.releaseDate.isNotEmpty()) {
+                val year = Instant.parse(track.releaseDate)
                     .atZone(ZoneId.of("UTC"))
                     .year
                     .toString()
@@ -79,11 +77,11 @@ class WalkmanActivity : AppCompatActivity(){
             } else {
                 yearValue.text = ""
             }
-            genreValue.text = primaryGenreName
-            countryValue.text = country
+            genreValue.text = track.primaryGenreName
+            countryValue.text = track.country
 
             Glide.with(this)
-                .load(artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"))
+                .load(track.artworkUrl100.replaceAfterLast("/", "512x512bb.jpg"))
                 .placeholder(R.drawable.ic_placeholder_cover)
                 .centerCrop()
                 .transform(RoundedCorners(
