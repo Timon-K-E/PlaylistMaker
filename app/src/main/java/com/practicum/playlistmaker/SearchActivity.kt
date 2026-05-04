@@ -18,6 +18,7 @@ import retrofit2.Response
 import androidx.core.widget.doOnTextChanged
 import android.view.inputmethod.EditorInfo
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.gson.Gson
@@ -105,9 +106,12 @@ class SearchActivity : AppCompatActivity() {
          // обработчик клика для добавления в историю
          trackAdapter = TrackAdapter(trackList) { track ->
              searchHistory.add(track) // Добавляем трек в историю
-             Toast.makeText(
-                 this, "Трек добавлен в историю", Toast.LENGTH_SHORT
-             ).show()
+
+             openPlayerScreen(track)
+//             Toast.makeText(
+//                 this, "Трек добавлен в историю", Toast.LENGTH_SHORT
+//             ).show()
+
          }
          recyclerView.adapter = trackAdapter
 
@@ -115,6 +119,8 @@ class SearchActivity : AppCompatActivity() {
          historyAdapter = TrackAdapter(historyList) { track ->
              // При клике на трек в истории также добавляем его в историю (обновляем позицию)
              searchHistory.add(track)
+             openPlayerScreen(track)
+
              // Обновляем список истории после добавления
              updateHistoryList()
          }
@@ -122,13 +128,21 @@ class SearchActivity : AppCompatActivity() {
 
      }
 
+    private fun openPlayerScreen(track: Track) {
+        val intent = Intent(this, WalkmanActivity::class.java).apply {
+            putExtra(IntentKeys.TRACK, track)
+        }
+        startActivity(intent)
+    }
+
+
     // Настройка отступов для системных панелей (статусной и навигационной)
     private fun setupSystemInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_search)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.setPadding(
                 systemBars.left,
-                systemBars.top,
+                systemBars.top/2,
                 systemBars.right,
                 systemBars.bottom
             )
@@ -162,7 +176,7 @@ class SearchActivity : AppCompatActivity() {
     private fun setupBackButtonListener() {
         val backButton = findViewById<Button>(R.id.back_screen_search)
         backButton.setOnClickListener {
-            finish() // Закрытие текущей Activity
+            finish()
         }
     }
 
