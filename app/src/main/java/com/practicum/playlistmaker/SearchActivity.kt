@@ -19,9 +19,12 @@ import androidx.core.widget.doOnTextChanged
 import android.view.inputmethod.EditorInfo
 import android.content.Context
 import android.content.Intent
+import android.os.Looper
+import android.os.Handler
 import android.widget.Toast
 import androidx.core.view.isVisible
 import com.google.gson.Gson
+import android.widget.ProgressBar
 
 
 class SearchActivity : AppCompatActivity() {
@@ -48,18 +51,28 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderNothingFound: LinearLayout
     private lateinit var placeholderNetworkError: LinearLayout
     private lateinit var refreshButton: Button
+    private lateinit var progressBar: ProgressBar
 
     // Элементы истории
     private lateinit var historyLayout: LinearLayout
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var clearHistoryButton: Button
 
+    //Handler and debouncer flag
+    private var isClickAllowed = true
+    private val searchRunnable = Runnable{ executeSearchQuery()}
+    private val handler = Handler(Looper.getMainLooper())
+
+
     //  КОНСТАНТЫ
     companion object {
         private const val SAVE_TEXT_KEY = "SAVE_TEXT_KEY"
         private const val EMPTY_STRING = ""
         private const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
+        const val SEARCH_DEBOUNCE_DELAY =  2000L
+        const val CLICK_DEBOUNCE_DELAY = 1000L
     }
+
 
     // ЖИЗНЕННЫЙ ЦИКЛ
     // Сохранение состояния при повороте экрана
@@ -82,7 +95,17 @@ class SearchActivity : AppCompatActivity() {
         restoreSavedState(savedInstanceState)// 3. Восстановление состояния при повороте экрана
         setupRecyclerView()// 4. Настройка адаптера для RecyclerView
         setupViewListeners()// 5. Настройка всех слушателей событий
-        showSoftKeyboardFor(searchEditText)// 6. Показать клавиатуру при открытии экрана
+        //showSoftKeyboardFor(searchEditText)// 6. Показать клавиатуру при открытии экрана
+        if (searchHistory.read().isNotEmpty()) {
+            updateHistoryList()
+            showHistory()
+        }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacksAndMessages(null) // Удаляем все задачи из Handler
     }
 
     //  ИНИЦИАЛИЗАЦИЯ КОМПОНЕНТОВ
@@ -95,6 +118,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderNothingFound = findViewById(R.id.placeholder_nothing_found)// Плейсхолдер "Ничего не найдено"
         placeholderNetworkError = findViewById(R.id.placeholder_network_error)// Плейсхолдер "Ошибка сети"
         refreshButton = findViewById(R.id.refresh_button)// Кнопка "Обновить" при ошибке сети
+        progressBar = findViewById(R.id.progress_bar)
 
         historyLayout = findViewById(R.id.search_history)
         historyRecyclerView = findViewById(R.id.recycler_view_history)
@@ -103,26 +127,21 @@ class SearchActivity : AppCompatActivity() {
 
      // Настройка адаптера для RecyclerView
      private fun setupRecyclerView() {
-         // обработчик клика для добавления в историю
          trackAdapter = TrackAdapter(trackList) { track ->
-             searchHistory.add(track) // Добавляем трек в историю
-
-             openPlayerScreen(track)
-//             Toast.makeText(
-//                 this, "Трек добавлен в историю", Toast.LENGTH_SHORT
-//             ).show()
+             trackClickDebounce{
+                 searchHistory.add(track) // Добавляем трек в историю
+                 openPlayerScreen(track)
+             }
 
          }
          recyclerView.adapter = trackAdapter
 
-         // Инициализация адаптера истории
          historyAdapter = TrackAdapter(historyList) { track ->
-             // При клике на трек в истории также добавляем его в историю (обновляем позицию)
-             searchHistory.add(track)
-             openPlayerScreen(track)
-
-             // Обновляем список истории после добавления
-             updateHistoryList()
+             trackClickDebounce { // При клике на трек в истории также добавляем его в историю (обновляем позицию), но теперь с защитой на 1 сек
+                 searchHistory.add(track)
+                 openPlayerScreen(track)
+                 updateHistoryList()// Обновляем список истории после добавления
+             }
          }
          historyRecyclerView.adapter = historyAdapter
 
@@ -167,9 +186,20 @@ class SearchActivity : AppCompatActivity() {
         setupBackButtonListener()
         setupClearButtonListener()
         setupTextChangeListeners()
-        setupKeyboardDoneListener()
         setupRefreshButtonListener()
         setupClearHistoryButtonListener()
+
+        setupTextInputListeners()
+    }
+//4
+    private fun setupTextInputListeners() {
+        searchEditText.setOnClickListener {
+            // При клике на поле поиска показываем историю, если она есть
+            if (searchEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) {
+                updateHistoryList()
+                showHistory()
+            }
+        }
     }
 
     // Настройка слушателя для кнопки "Назад"
@@ -188,6 +218,7 @@ class SearchActivity : AppCompatActivity() {
             trackAdapter.notifyDataSetChanged()
             dismissSoftKeyboard()// Скрытие клавиатуры
             searchEditText.clearFocus()// Снятие фокуса с поля ввода
+            handler.removeCallbacks(searchRunnable)
             updateUIState(SearchResult.NO_RESULTS_OR_CLEAR)// Показать состояние "поле очищено"
         }
     }
@@ -209,10 +240,11 @@ class SearchActivity : AppCompatActivity() {
             clearButton.visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
             // Сохранение текста для восстановления состояния
             savedSearchText = text?.toString() ?: ""
-
-            //  Логика показа истории при пустом поле
-            if (text.isNullOrEmpty()) {
-                // Если поле пустое и есть история - показываем историю
+            handler.removeCallbacks(searchRunnable)//поиски запланированные отменяются
+            if (text.isNullOrEmpty()) { // Если поле пустое
+                hideLoading()
+                trackList.clear()
+                trackAdapter.notifyDataSetChanged()
                 if (searchHistory.read().isNotEmpty()) {
                     updateHistoryList() // Обновляем список истории
                     showHistory()
@@ -221,38 +253,16 @@ class SearchActivity : AppCompatActivity() {
                 }
                 updateUIState(SearchResult.NO_RESULTS_OR_CLEAR)
             } else {
-                hideHistory() // Если есть текст - скрываем историю
+                hideHistory()
+                showLoading()
+                handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)//откладываем на 2 сек. при вводе
+
             }
         }
 
-        // Показ истории при фокусе на поле ввода
-        searchEditText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus && searchEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) {
-                updateHistoryList() // Обновляем список истории
-                showHistory() // Показываем историю
-            }
-        }
-
-        // Показ клавиатуры при клике на поле ввода
+         // Показ клавиатуры при клике на поле ввода
         searchEditText.setOnClickListener {
             showSoftKeyboardFor(searchEditText)
-        }
-    }
-
-    // Настройка обработки нажатия "Done" на клавиатуре
-    private fun setupKeyboardDoneListener() {
-        searchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (searchEditText.text.isNotEmpty()) {
-                    executeSearchQuery() // Выполнить поиск
-                } else {
-                    dismissSoftKeyboard()
-                    updateUIState(SearchResult.NO_RESULTS_OR_CLEAR)
-                }
-                true
-            } else {
-                false
-            }
         }
     }
 
@@ -287,6 +297,9 @@ class SearchActivity : AppCompatActivity() {
             updateUIState(SearchResult.NO_RESULTS_OR_CLEAR)
             return
         }
+
+        showLoading()//Показываем прогресс
+
         // Выполнение сетевого запроса через Retrofit
         ITunesClient.itunesApiService.search(searchText)
             .enqueue(object : Callback<ITunesResponse> {
@@ -294,13 +307,26 @@ class SearchActivity : AppCompatActivity() {
                     call: Call<ITunesResponse>,
                     response: Response<ITunesResponse>
                 ) {
+                    hideLoading()
                     handleSearchResponse(response)
                 }
                 override fun onFailure(call: Call<ITunesResponse>, t: Throwable) {
-
+                    hideLoading()
                     updateUIState(SearchResult.ERROR)// Ошибка сети (нет подключения и др.)
                 }
             })
+    }
+
+    private fun showLoading() {
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        placeholderNetworkError.visibility = View.GONE
+        placeholderNothingFound.visibility = View.GONE
+        historyLayout.visibility = View.GONE
+    }
+
+    private fun hideLoading() {
+        progressBar.visibility = View.GONE
     }
 
      // Обработка ответа от сервера поиска
@@ -403,10 +429,23 @@ class SearchActivity : AppCompatActivity() {
     // Показать блок истории
     private fun showHistory() {
         historyLayout.isVisible = true
+        recyclerView.isVisible = false
+        placeholderNothingFound.isVisible = false
+        placeholderNetworkError.isVisible = false
     }
 
     // Скрыть блок истории
     private fun hideHistory() {
         historyLayout.isVisible = false
     }
+
+    private fun trackClickDebounce(action: () -> Unit) {
+        if (isClickAllowed) {
+            isClickAllowed = false
+            action.invoke()
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+    }
+
 }
+
