@@ -11,4 +11,5 @@ object IntentKeys {
     const val RELEASE_DATE = "releaseDate"
     const val COUNTRY = "country"
     const val PRIMARY_GENRE = "primaryGenreName"
+    const val PREVIEW_URL = "previewUrl"
 }

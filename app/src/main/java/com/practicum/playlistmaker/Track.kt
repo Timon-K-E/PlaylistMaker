@@ -14,7 +14,8 @@ data class Track(
     @SerializedName(IntentKeys.COLLECTION_NAME) val collectionName: String, //альбом
     @SerializedName(IntentKeys.RELEASE_DATE) val releaseDate: String,
     @SerializedName(IntentKeys.COUNTRY) val country: String, //страна
-    @SerializedName(IntentKeys.PRIMARY_GENRE) val primaryGenreName: String //Жанр
+    @SerializedName(IntentKeys.PRIMARY_GENRE) val primaryGenreName: String, //Жанр
+    @SerializedName(IntentKeys.PREVIEW_URL) val previewUrl: String
 
 ): Parcelable
 

@@ -8,7 +8,6 @@
     android:background="?attr/colorSurface"
     android:theme="@style/Theme.PlaylistMaker">
 
-
     <Button
         android:id="@+id/back_screen_walkman"
         style="@style/ButtonBack"
@@ -16,7 +15,6 @@
         android:layout_marginTop="@dimen/element_margin_14"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -28,7 +26,6 @@
         app:layout_constraintHeight_max="wrap"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/back_screen_walkman">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/container_walkman"
@@ -50,7 +47,6 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="@dimen/element_margin_24" />
 
-
             <ImageView
                 android:id="@+id/albumCover"
                 android:layout_width="0dp"
@@ -61,7 +57,6 @@
                 app:layout_constraintEnd_toEndOf="@id/rightGuideline"
                 app:layout_constraintStart_toStartOf="@id/leftGuideline"
                 app:layout_constraintTop_toTopOf="@id/container_walkman" />
-
 
             <TextView
                 android:id="@+id/songTitle"
@@ -74,19 +69,45 @@
                 app:layout_constraintTop_toBottomOf="@id/albumCover"
                 tools:text="@string/label_track_name" />
 
-
             <TextView
                 android:id="@+id/artistName"
                 style="@style/TextTitleMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:textSize="@dimen/text_size_14"
                 app:layout_constraintEnd_toEndOf="@id/rightGuideline"
                 app:layout_constraintStart_toStartOf="@id/leftGuideline"
                 app:layout_constraintTop_toBottomOf="@id/songTitle"
                 tools:text="@string/label_artist" />
 
+            <FrameLayout
+                android:id="@+id/buttonsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/element_margin_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/artistName">
+
+                <ImageButton
+                    android:id="@+id/playButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorSurface"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_play_84"
+                    android:visibility="visible" />
+
+                <ImageButton
+                    android:id="@+id/pauseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorSurface"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_stop_84"
+                    android:visibility="invisible" />
+
+            </FrameLayout>
 
             <ImageButton
                 android:id="@+id/addToPlaylistButton"
@@ -95,24 +116,10 @@
                 android:background="@drawable/ic_circle_background_54"
                 android:scaleType="center"
                 android:src="@drawable/ic_add_to_playlist_23"
-                app:layout_constraintBottom_toBottomOf="@id/playButton"
+                app:layout_constraintBottom_toBottomOf="@id/buttonsContainer"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="@id/leftGuideline"
-                app:layout_constraintTop_toTopOf="@id/playButton" />
-
-
-            <ImageButton
-                android:id="@+id/playButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/element_margin_24"
-                android:background="?attr/colorSurface"
-                android:scaleType="center"
-                android:src="@drawable/ic_play_84"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/artistName" />
-
+                app:layout_constraintTop_toTopOf="@id/buttonsContainer" />
 
             <ImageButton
                 android:id="@+id/addToFavoritesButton"
@@ -121,10 +128,10 @@
                 android:background="@drawable/ic_circle_background_54"
                 android:scaleType="center"
                 android:src="@drawable/ic_favorite_border_25_23"
-                app:layout_constraintBottom_toBottomOf="@id/playButton"
+                app:layout_constraintBottom_toBottomOf="@id/buttonsContainer"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="@id/rightGuideline"
-                app:layout_constraintTop_toTopOf="@id/playButton" />
+                app:layout_constraintTop_toTopOf="@id/buttonsContainer" />
 
             <TextView
                 android:id="@+id/timePlay"
@@ -135,11 +142,10 @@
                 android:gravity="center"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="@dimen/text_size_14"
-                app:layout_constraintEnd_toEndOf="@id/playButton"
-                app:layout_constraintStart_toStartOf="@id/playButton"
-                app:layout_constraintTop_toBottomOf="@id/playButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buttonsContainer"
                 tools:text="3:45" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/metadataContainer"
@@ -151,7 +157,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/timePlay">
-
 
                 <TextView
                     android:id="@+id/durationLabel"
@@ -173,7 +178,6 @@
                     app:layout_constraintStart_toEndOf="@id/durationLabel"
                     app:layout_constraintTop_toTopOf="@id/durationLabel"
                     tools:text="3:45" />
-
 
                 <TextView
                     android:id="@+id/albumLabel"
@@ -221,7 +225,6 @@
                     app:layout_constraintTop_toTopOf="@id/yearLabel"
                     tools:text="2023" />
 
-
                 <TextView
                     android:id="@+id/genreLabel"
                     style="@style/TextMetadataLabel"
@@ -244,7 +247,6 @@
                     app:layout_constraintStart_toEndOf="@id/genreLabel"
                     app:layout_constraintTop_toTopOf="@id/genreLabel"
                     tools:text="Рок" />
-
 
                 <TextView
                     android:id="@+id/countryLabel"
