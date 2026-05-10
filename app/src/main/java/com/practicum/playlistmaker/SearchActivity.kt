@@ -109,26 +109,26 @@ class SearchActivity : AppCompatActivity() {
         clearHistoryButton = findViewById(R.id.clear_button_history)
     }
 
-     private fun setupRecyclerView() {
-         trackAdapter = TrackAdapter(trackList) { track ->
-             trackClickDebounce{
-                 searchHistory.add(track)
-                 openPlayerScreen(track)
-             }
+    private fun setupRecyclerView() {
+        trackAdapter = TrackAdapter(trackList) { track ->
+            trackClickDebounce{
+                searchHistory.add(track)
+                openPlayerScreen(track)
+            }
 
-         }
-         recyclerView.adapter = trackAdapter
+        }
+        recyclerView.adapter = trackAdapter
 
-         historyAdapter = TrackAdapter(historyList) { track ->
-             trackClickDebounce {
-                 searchHistory.add(track)
-                 openPlayerScreen(track)
-                 updateHistoryList()
-             }
-         }
-         historyRecyclerView.adapter = historyAdapter
+        historyAdapter = TrackAdapter(historyList) { track ->
+            trackClickDebounce {
+                searchHistory.add(track)
+                openPlayerScreen(track)
+                updateHistoryList()
+            }
+        }
+        historyRecyclerView.adapter = historyAdapter
 
-     }
+    }
 
     private fun openPlayerScreen(track: Track) {
         val intent = Intent(this, WalkmanActivity::class.java).apply {
@@ -157,7 +157,7 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.setText(savedSearchText)
         }
 
-        clearButton.visibility = if (savedSearchText.isEmpty()) View.GONE else View.VISIBLE
+        clearButton.isVisible = savedSearchText.isNotEmpty()
     }
 
 
@@ -170,7 +170,7 @@ class SearchActivity : AppCompatActivity() {
 
         setupTextInputListeners()
     }
-//4
+
     private fun setupTextInputListeners() {
         searchEditText.setOnClickListener {
             if (searchEditText.text.isEmpty() && searchHistory.read().isNotEmpty()) {
@@ -211,7 +211,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setupTextChangeListeners() {
         searchEditText.doOnTextChanged { text, _, _, _ ->
-            clearButton.visibility = if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
+            clearButton.isVisible = !text.isNullOrEmpty()
             savedSearchText = text?.toString() ?: ""
             handler.removeCallbacks(searchRunnable)
             if (text.isNullOrEmpty()) {
@@ -285,15 +285,15 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showLoading() {
-        progressBar.visibility = View.VISIBLE
-        recyclerView.visibility = View.GONE
-        placeholderNetworkError.visibility = View.GONE
-        placeholderNothingFound.visibility = View.GONE
-        historyLayout.visibility = View.GONE
+        progressBar.isVisible = true
+        recyclerView.isVisible = false
+        placeholderNetworkError.isVisible = false
+        placeholderNothingFound.isVisible = false
+        historyLayout.isVisible = false
     }
 
     private fun hideLoading() {
-        progressBar.visibility = View.GONE
+        progressBar.isVisible = false
     }
 
     private fun handleSearchResponse(response: Response<ITunesResponse>) {
@@ -350,14 +350,14 @@ class SearchActivity : AppCompatActivity() {
 
 
     private fun hideAllUIStates() {
-         recyclerView.isVisible = false
-         placeholderNothingFound.isVisible = false
-         placeholderNetworkError.isVisible = false
+        recyclerView.isVisible = false
+        placeholderNothingFound.isVisible = false
+        placeholderNetworkError.isVisible = false
     }
 
 
     private fun displaySearchResults() {
-         recyclerView.isVisible = true
+        recyclerView.isVisible = true
     }
 
     private fun displayEmptyState() {
@@ -369,7 +369,7 @@ class SearchActivity : AppCompatActivity() {
     private fun displayNetworkErrorState() {
         trackList.clear()
         trackAdapter.notifyDataSetChanged()
-         placeholderNetworkError.isVisible = true
+        placeholderNetworkError.isVisible = true
     }
 
     private fun resetSearchUI() {
@@ -403,4 +403,3 @@ class SearchActivity : AppCompatActivity() {
     }
 
 }
-
