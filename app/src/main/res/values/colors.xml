@@ -12,4 +12,5 @@
     <color name="track_color_selector_light">#76EAE0</color>
     <color name="thumb_color_selector_night">#3772E7</color>
     <color name="track_color_selector_night">#9FBBF3</color>
+    <color name="blue_progress_bar">#3772E7</color>
 </resources>
