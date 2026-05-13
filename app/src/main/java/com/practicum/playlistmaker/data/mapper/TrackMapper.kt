@@ -13,6 +13,7 @@ object TrackMapper {
             trackId = dto.trackId,
             trackName = dto.trackName,
             artistName = dto.artistName,
+            trackTimeMillis = dto.trackTimeMillis,
             formattedTime = dateFormat.format(dto.trackTimeMillis),
             artworkUrl100 = dto.artworkUrl100,
             collectionName = dto.collectionName,

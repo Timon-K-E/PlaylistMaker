@@ -3,8 +3,11 @@ package com.practicum.playlistmaker.data.repository
 import android.content.SharedPreferences
 import com.practicum.playlistmaker.domain.api.SearchHistoryRepository
 import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.data.mapper.TrackHistoryMapper
+import com.practicum.playlistmaker.data.dto.TrackHistoryDto
 import com.google.gson.Gson
 import androidx.core.content.edit
+
 
 class SearchHistoryRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
@@ -13,17 +16,26 @@ class SearchHistoryRepositoryImpl(
 
     override fun read(): List<Track> {
         val json = sharedPreferences.getString(HISTORY_KEY, null) ?: return emptyList()
-        return gson.fromJson(json, Array<Track>::class.java).toList()
+
+        val dtoList = gson.fromJson(json, Array<TrackHistoryDto>::class.java).toList()
+
+        return dtoList.map { TrackHistoryMapper.mapToTrack(it) }
     }
 
     override fun add(track: Track) {
         val history = read().toMutableList()
+
         history.removeIf { it.trackId == track.trackId }
         history.add(0, track)
-        if (history.size > MAX_HISTORY_SIZE) history.removeAt(MAX_HISTORY_SIZE)
+
+        if (history.size > MAX_HISTORY_SIZE) {
+            history.removeAt(MAX_HISTORY_SIZE)
+        }
+
+        val dtoList = history.map { TrackHistoryMapper.mapToDto(it) }
 
         sharedPreferences.edit {
-            putString(HISTORY_KEY, gson.toJson(history))
+            putString(HISTORY_KEY, gson.toJson(dtoList))
         }
     }
 
