@@ -20,7 +20,7 @@ class SearchHistoryRepositoryImpl(
         val history = read().toMutableList()
         history.removeIf { it.trackId == track.trackId }
         history.add(0, track)
-        if (history.size > 10) history.removeAt(10)
+        if (history.size > MAX_HISTORY_SIZE) history.removeAt(MAX_HISTORY_SIZE)
 
         sharedPreferences.edit {
             putString(HISTORY_KEY, gson.toJson(history))
@@ -33,5 +33,6 @@ class SearchHistoryRepositoryImpl(
 
     companion object {
         const val HISTORY_KEY = "HISTORY_KEY"
+        private const val MAX_HISTORY_SIZE = 10
     }
 }

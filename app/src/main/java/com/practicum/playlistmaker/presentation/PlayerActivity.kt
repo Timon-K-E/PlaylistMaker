@@ -25,10 +25,9 @@ class PlayerActivity : AppCompatActivity() {
 
     companion object {
         const val TRACK_KEY = "TRACK_KEY"
-        private const val UPDATE_DELAY = 300L
+        private const val UPDATE_DELAY = 200L
     }
 
-    // UI
     private lateinit var backButton: Button
     private lateinit var coverImage: ImageView
     private lateinit var songTitle: TextView
@@ -46,14 +45,12 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var pauseButton: ImageButton
     private lateinit var currentTime: TextView
 
-    // Логика
     private lateinit var playerInteractor: PlayerInteractor
     private var mainThreadHandler: Handler? = null
     private var timerRunnable: Runnable? = null
 
-    // Состояние
-    private var isPlaying = false
 
+    private lateinit var currentTrack: Track
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,15 +62,14 @@ class PlayerActivity : AppCompatActivity() {
         playerInteractor = Creator.providePlayerInteractor()
         mainThreadHandler = Handler(Looper.getMainLooper())
 
-        val json = intent.getStringExtra(TRACK_KEY)
-        val track = Gson().fromJson(json, Track::class.java)
 
-        if (track != null) {
-            bindTrackData(track)
-            preparePlayer(track.previewUrl)
-        } else {
+        currentTrack = intent.getParcelableExtra(TRACK_KEY) ?: run {
             finish()
+            return
         }
+
+        bindTrackData(currentTrack)
+        preparePlayer(currentTrack.previewUrl)
 
         backButton.setOnClickListener { finish() }
         playButton.setOnClickListener { startPlayer() }
@@ -157,7 +153,6 @@ class PlayerActivity : AppCompatActivity() {
         })
 
         playerInteractor.setOnCompletionListener {
-            isPlaying = false
             playButton.isVisible = true
             pauseButton.isVisible = false
             currentTime.text = "00:00"
@@ -167,7 +162,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun startPlayer() {
         playerInteractor.startPlayer()
-        isPlaying = true
         playButton.isVisible = false
         pauseButton.isVisible = true
         startTimer()
@@ -175,7 +169,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun pausePlayer() {
         playerInteractor.pausePlayer()
-        isPlaying = false
         playButton.isVisible = true
         pauseButton.isVisible = false
         timerRunnable?.let { mainThreadHandler?.removeCallbacks(it) }
@@ -184,16 +177,21 @@ class PlayerActivity : AppCompatActivity() {
     private fun startTimer() {
         timerRunnable = object : Runnable {
             override fun run() {
-                if (isPlaying) {
+                if (playerInteractor.isPlaying()) {
                     val currentPosition = playerInteractor.getCurrentPosition()
                     currentTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
                     mainThreadHandler?.postDelayed(this, UPDATE_DELAY)
+                } else {
+                    stopTimer()
                 }
             }
         }
         mainThreadHandler?.post(timerRunnable!!)
     }
 
+    private fun stopTimer(){
+        timerRunnable?.let{mainThreadHandler?.removeCallbacks(it)}
+    }
     private fun applyWindowInsets() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_walkman)) { view, insets ->

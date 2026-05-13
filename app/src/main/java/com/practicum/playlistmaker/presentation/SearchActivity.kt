@@ -238,7 +238,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun openPlayer(track: Track) {
         val intent = Intent(this, PlayerActivity::class.java).apply {
-            putExtra(PlayerActivity.TRACK_KEY, Gson().toJson(track))
+            putExtra(PlayerActivity.TRACK_KEY, track)
         }
         startActivity(intent)
     }
