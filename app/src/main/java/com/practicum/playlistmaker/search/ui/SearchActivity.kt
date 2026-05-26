@@ -46,9 +46,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
 
-    companion object {
-        private const val SAVE_TEXT = "SAVE_TEXT"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -210,5 +207,9 @@ class SearchActivity : AppCompatActivity() {
             )
             insets
         }
+    }
+
+    companion object {
+        private const val SAVE_TEXT = "SAVE_TEXT"
     }
 }

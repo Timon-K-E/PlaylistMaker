@@ -20,6 +20,9 @@ class PlayerViewModel(
     private var timerRunnable: Runnable? = null
     private var isPrepared = false
 
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
+    internal  val zeroTimeString by lazy { dateFormat.format(0) }
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
 
@@ -76,7 +79,7 @@ class PlayerViewModel(
             override fun run() {
                 if (playerInteractor.isPlaying()) {
                     val currentPosition = playerInteractor.getCurrentPosition()
-                    val formattedTime = SimpleDateFormat("mm:ss", Locale.getDefault()).format(currentPosition)
+                    val formattedTime = dateFormat.format(currentPosition)
                     stateLiveData.value = PlayerState.TimeUpdate(formattedTime)
                     handler.postDelayed(this, UPDATE_DELAY)
                 } else {

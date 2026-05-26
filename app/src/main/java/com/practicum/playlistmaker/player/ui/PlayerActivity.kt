@@ -95,7 +95,7 @@ class PlayerActivity : AppCompatActivity() {
         playButton = findViewById(R.id.playButton)
         pauseButton = findViewById(R.id.pauseButton)
         currentTime = findViewById(R.id.timePlay)
-        currentTime.text = "00:00"
+        currentTime.text = viewModel.zeroTimeString
     }
 
     private fun setupObservers() {
@@ -114,7 +114,7 @@ class PlayerActivity : AppCompatActivity() {
                 playButton.isEnabled = true
                 playButton.isVisible = true
                 pauseButton.isVisible = false
-                currentTime.text = "00:00"
+                currentTime.text = viewModel.zeroTimeString
             }
             is PlayerState.Prepared -> {
                 playButton.isEnabled = true
@@ -136,7 +136,7 @@ class PlayerActivity : AppCompatActivity() {
                 playButton.isEnabled = true
                 playButton.isVisible = true
                 pauseButton.isVisible = false
-                currentTime.text = "00:00"
+                currentTime.text = viewModel.zeroTimeString
             }
         }
     }
