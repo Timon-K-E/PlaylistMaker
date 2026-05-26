@@ -63,16 +63,19 @@ class PlayerActivity : AppCompatActivity() {
         applyWindowInsets()
         setupObservers()
 
-        backButton.setOnClickListener { finish() }
+        backButton.setOnClickListener {
+            viewModel.pausePlayer()
+            finish()
+        }
         playButton.setOnClickListener { viewModel.playButtonClicked() }
         pauseButton.setOnClickListener { viewModel.pauseButtonClicked() }
-
-        playButton.isEnabled = false
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.pausePlayer()
+    override fun onStop() {
+        super.onStop()
+        if (!isChangingConfigurations) {
+            viewModel.pausePlayer()
+        }
     }
 
     private fun initViews() {
@@ -92,7 +95,6 @@ class PlayerActivity : AppCompatActivity() {
         playButton = findViewById(R.id.playButton)
         pauseButton = findViewById(R.id.pauseButton)
         currentTime = findViewById(R.id.timePlay)
-
         currentTime.text = "00:00"
     }
 
@@ -108,6 +110,12 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun renderState(state: PlayerState) {
         when (state) {
+            is PlayerState.Default -> {
+                playButton.isEnabled = true
+                playButton.isVisible = true
+                pauseButton.isVisible = false
+                currentTime.text = "00:00"
+            }
             is PlayerState.Prepared -> {
                 playButton.isEnabled = true
                 playButton.isVisible = true
@@ -125,6 +133,7 @@ class PlayerActivity : AppCompatActivity() {
                 currentTime.text = state.currentTime
             }
             is PlayerState.Completion -> {
+                playButton.isEnabled = true
                 playButton.isVisible = true
                 pauseButton.isVisible = false
                 currentTime.text = "00:00"
@@ -168,12 +177,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_walkman)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(
-                systemBars.left,
-                systemBars.top / 2,
-                systemBars.right,
-                systemBars.bottom
-            )
+            view.setPadding(systemBars.left, systemBars.top / 2, systemBars.right, systemBars.bottom)
             insets
         }
     }

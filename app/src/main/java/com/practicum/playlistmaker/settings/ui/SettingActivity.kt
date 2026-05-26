@@ -41,34 +41,32 @@ class SettingsActivity : AppCompatActivity() {
             themeSwitch.isChecked = isDarkTheme
         }
 
-        viewModel.observeNavigationCommands().observe(this) { command ->
-            when (command) {
-                is SettingsNavigationCommand.ShareApp -> {
-                    val shareText = getString(R.string.share_app_text)
-                    val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                        type = "text/plain"
-                        putExtra(Intent.EXTRA_TEXT, shareText)
+        viewModel.observeNavigationCommands().observe(this) { event ->
+            event.getContentIfNotHandled()?.let { command ->
+                when (command) {
+                    is SettingsNavigationCommand.ShareApp -> {
+                        val shareText = getString(R.string.share_app_text)
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, shareText)
+                        }
+                        startActivity(shareIntent)
                     }
-                    startActivity(shareIntent)
-                    viewModel.onNavigationCommandProcessed()
-                }
-                is SettingsNavigationCommand.OpenSupport -> {
-                    val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:")
-                        putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_email)))
-                        putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
-                        putExtra(Intent.EXTRA_TEXT, getString(R.string.support_body))
+                    is SettingsNavigationCommand.OpenSupport -> {
+                        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:")
+                            putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.support_email)))
+                            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
+                            putExtra(Intent.EXTRA_TEXT, getString(R.string.support_body))
+                        }
+                        startActivity(emailIntent)
                     }
-                    startActivity(emailIntent)
-                    viewModel.onNavigationCommandProcessed()
+                    is SettingsNavigationCommand.OpenUserAgreement -> {
+                        val url = getString(R.string.user_agreement_url)
+                        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                        startActivity(browserIntent)
+                    }
                 }
-                is SettingsNavigationCommand.OpenUserAgreement -> {
-                    val url = getString(R.string.user_agreement_url)
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                    startActivity(browserIntent)
-                    viewModel.onNavigationCommandProcessed()
-                }
-                null -> { }
             }
         }
 
@@ -85,12 +83,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun applyWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main_setting)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(
-                systemBars.left,
-                systemBars.top / 2,
-                systemBars.right,
-                systemBars.bottom
-            )
+            view.setPadding(systemBars.left, systemBars.top / 2, systemBars.right, systemBars.bottom)
             insets
         }
     }

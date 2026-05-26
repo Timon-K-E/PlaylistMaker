@@ -18,6 +18,7 @@ class PlayerViewModel(
 
     private val handler = Handler(Looper.getMainLooper())
     private var timerRunnable: Runnable? = null
+    private var isPrepared = false
 
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
@@ -31,19 +32,25 @@ class PlayerViewModel(
     }
 
     private fun preparePlayer() {
-        stateLiveData.value = PlayerState.Paused
+        stateLiveData.value = PlayerState.Default
 
         playerInteractor.preparePlayer(track.previewUrl) {
+            isPrepared = true
             stateLiveData.value = PlayerState.Prepared
         }
 
         playerInteractor.setOnCompletionListener {
+            isPrepared = false
             stateLiveData.value = PlayerState.Completion
             stopTimer()
         }
     }
 
     fun playButtonClicked() {
+        if (!isPrepared) {
+            preparePlayer()
+            return
+        }
         playerInteractor.startPlayer()
         stateLiveData.value = PlayerState.Playing
         startTimer()
@@ -64,6 +71,7 @@ class PlayerViewModel(
     }
 
     private fun startTimer() {
+        stopTimer()
         timerRunnable = object : Runnable {
             override fun run() {
                 if (playerInteractor.isPlaying()) {
@@ -81,6 +89,7 @@ class PlayerViewModel(
 
     private fun stopTimer() {
         timerRunnable?.let { handler.removeCallbacks(it) }
+        timerRunnable = null
     }
 
     override fun onCleared() {
