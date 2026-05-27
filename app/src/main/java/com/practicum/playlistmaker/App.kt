@@ -1,28 +1,19 @@
 package com.practicum.playlistmaker
 
 import android.app.Application
-import com.practicum.playlistmaker.di.appModule
-import com.practicum.playlistmaker.di.playerModule
-import com.practicum.playlistmaker.di.viewModelModule
-import com.practicum.playlistmaker.settings.domain.SettingsInteractor
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
-import org.koin.java.KoinJavaComponent.get
+import com.practicum.playlistmaker.presentation.Creator
 
 class App : Application() {
+    var darkTheme = false
+
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            androidContext(this@App)
-            modules(
-                appModule,
-                playerModule,
-                viewModelModule
-            )
-        }
+        Creator.initialize(this)
 
-        val settingsInteractor: SettingsInteractor = get(SettingsInteractor::class.java)
+        val settingsInteractor = Creator.provideSettingsInteractor()
+        darkTheme = settingsInteractor.getThemeSettings().isDarkTheme
+
         settingsInteractor.applyCurrentTheme()
     }
 }
