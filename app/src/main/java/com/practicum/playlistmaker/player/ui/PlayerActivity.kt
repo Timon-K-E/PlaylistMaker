@@ -10,21 +10,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.domain.PlayerState
 import com.practicum.playlistmaker.search.domain.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PlayerActivity : AppCompatActivity() {
 
-    companion object {
-        const val TRACK_KEY = "TRACK_KEY"
+    private val viewModel: PlayerViewModel by viewModel {
+        parametersOf(intent.getParcelableExtra<Track>(TRACK_KEY))
     }
-
-    private lateinit var viewModel: PlayerViewModel
 
     private lateinit var backButton: Button
     private lateinit var coverImage: ImageView
@@ -48,32 +46,46 @@ class PlayerActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_player)
 
-        val track = intent.getParcelableExtra<Track>(TRACK_KEY) ?: run {
+        val track = intent.getParcelableExtra<Track>(TRACK_KEY)
+        if (track == null) {
             finish()
             return
         }
-
-        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                return PlayerViewModel(Creator.providePlayerInteractor(), track) as T
-            }
-        })[PlayerViewModel::class.java]
 
         initViews()
         applyWindowInsets()
         setupObservers()
 
         backButton.setOnClickListener {
-            viewModel.pausePlayer()
             finish()
         }
         playButton.setOnClickListener { viewModel.playButtonClicked() }
         pauseButton.setOnClickListener { viewModel.pauseButtonClicked() }
     }
 
+    override fun onStart() {
+        super.onStart()
+        if (viewModel.isPlaying()) {
+            playButton.isVisible = false
+            pauseButton.isVisible = true
+            currentTime.text = viewModel.getCurrentPosition()
+        } else if (viewModel.getCurrentPosition() != "00:00") {
+            playButton.isVisible = true
+            pauseButton.isVisible = false
+            currentTime.text = viewModel.getCurrentPosition()
+        }
+    }
+
     override fun onStop() {
         super.onStop()
         if (!isChangingConfigurations) {
+            viewModel.pausePlayer()
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (isFinishing) {
             viewModel.pausePlayer()
         }
     }
@@ -95,7 +107,6 @@ class PlayerActivity : AppCompatActivity() {
         playButton = findViewById(R.id.playButton)
         pauseButton = findViewById(R.id.pauseButton)
         currentTime = findViewById(R.id.timePlay)
-        currentTime.text = viewModel.zeroTimeString
     }
 
     private fun setupObservers() {
@@ -180,5 +191,8 @@ class PlayerActivity : AppCompatActivity() {
             view.setPadding(systemBars.left, systemBars.top / 2, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+    companion object {
+        const val TRACK_KEY = "TRACK_KEY"
     }
 }

@@ -15,17 +15,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.search.domain.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
@@ -46,20 +45,10 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_search)
-
-        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
-            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                return SearchViewModel(
-                    Creator.provideTracksInteractor(),
-                    Creator.provideSearchHistoryInteractor()
-                ) as T
-            }
-        })[SearchViewModel::class.java]
 
         initViews()
         setupAdapters()

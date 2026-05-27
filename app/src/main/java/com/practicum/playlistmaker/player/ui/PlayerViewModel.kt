@@ -19,10 +19,11 @@ class PlayerViewModel(
     private val handler = Handler(Looper.getMainLooper())
     private var timerRunnable: Runnable? = null
     private var isPrepared = false
+    private var currentPlayerState: PlayerState = PlayerState.Default
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
-    internal  val zeroTimeString by lazy { dateFormat.format(0) }
+    internal val zeroTimeString by lazy { dateFormat.format(0) }
     private val stateLiveData = MutableLiveData<PlayerState>()
     fun observeState(): LiveData<PlayerState> = stateLiveData
 
@@ -35,16 +36,29 @@ class PlayerViewModel(
     }
 
     private fun preparePlayer() {
-        stateLiveData.value = PlayerState.Default
-
         playerInteractor.preparePlayer(track.previewUrl) {
             isPrepared = true
-            stateLiveData.value = PlayerState.Prepared
+            val currentPosition = playerInteractor.getCurrentPosition()
+            if (playerInteractor.isPlaying()) {
+                currentPlayerState = PlayerState.Playing
+                stateLiveData.value = currentPlayerState
+                stateLiveData.value = PlayerState.TimeUpdate(dateFormat.format(currentPosition))
+                startTimer()
+            } else if (currentPosition > 0) {
+                currentPlayerState = PlayerState.Paused
+                stateLiveData.value = currentPlayerState
+                stateLiveData.value = PlayerState.TimeUpdate(dateFormat.format(currentPosition))
+            } else {
+                currentPlayerState = PlayerState.Prepared
+                stateLiveData.value = currentPlayerState
+                stateLiveData.value = PlayerState.TimeUpdate(zeroTimeString)
+            }
         }
 
         playerInteractor.setOnCompletionListener {
             isPrepared = false
-            stateLiveData.value = PlayerState.Completion
+            currentPlayerState = PlayerState.Completion
+            stateLiveData.value = currentPlayerState
             stopTimer()
         }
     }
@@ -55,22 +69,37 @@ class PlayerViewModel(
             return
         }
         playerInteractor.startPlayer()
-        stateLiveData.value = PlayerState.Playing
+        currentPlayerState = PlayerState.Playing
+        stateLiveData.value = currentPlayerState
         startTimer()
     }
 
     fun pauseButtonClicked() {
         playerInteractor.pausePlayer()
-        stateLiveData.value = PlayerState.Paused
+        currentPlayerState = PlayerState.Paused
+        stateLiveData.value = currentPlayerState
         stopTimer()
+        val currentPosition = playerInteractor.getCurrentPosition()
+        stateLiveData.value = PlayerState.TimeUpdate(dateFormat.format(currentPosition))
     }
 
     fun pausePlayer() {
         if (playerInteractor.isPlaying()) {
             playerInteractor.pausePlayer()
-            stateLiveData.value = PlayerState.Paused
+            currentPlayerState = PlayerState.Paused
+            stateLiveData.value = currentPlayerState
             stopTimer()
+            val currentPosition = playerInteractor.getCurrentPosition()
+            stateLiveData.value = PlayerState.TimeUpdate(dateFormat.format(currentPosition))
         }
+    }
+
+    fun getCurrentPosition(): String {
+        return dateFormat.format(playerInteractor.getCurrentPosition())
+    }
+
+    fun isPlaying(): Boolean {
+        return playerInteractor.isPlaying()
     }
 
     private fun startTimer() {
