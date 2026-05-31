@@ -8,7 +8,7 @@ import com.practicum.playlistmaker.search.domain.Track
 
 class SearchHistoryRepositoryImpl(
     private val sharedPreferences: SharedPreferences,
-    private val gson: Gson = Gson()
+    private val gson: Gson
 ) : SearchHistoryRepository {
 
     override fun read(): List<Track> {

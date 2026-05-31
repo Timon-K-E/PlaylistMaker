@@ -19,6 +19,7 @@ class SearchViewModel(
     private var isClickAllowed = true
     private var currentQuery = ""
     private var lastSearchResults: List<Track>? = null
+    private var progressStartTime = 0L
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
@@ -39,6 +40,7 @@ class SearchViewModel(
             lastSearchResults = null
             loadHistory()
         } else {
+            progressStartTime = System.currentTimeMillis()
             stateLiveData.value = SearchState.Loading
             handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
         }
@@ -52,29 +54,44 @@ class SearchViewModel(
             object : TracksInteractor.TrackConsumer {
                 override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                     handler.post {
-                        when {
-                            errorMessage != null -> {
-                                lastSearchResults = null
-                                stateLiveData.value = SearchState.Error
-                            }
-                            foundTracks.isNullOrEmpty() -> {
-                                lastSearchResults = null
-                                stateLiveData.value = SearchState.Empty
-                            }
-                            else -> {
-                                lastSearchResults = foundTracks
-                                stateLiveData.value = SearchState.Content(foundTracks)
-                            }
+                        val elapsedTime = System.currentTimeMillis() - progressStartTime
+                        val remainingTime = PROGRESS_MIN_DISPLAY_TIME - elapsedTime
+
+                        if (remainingTime > 0) {
+                            handler.postDelayed({
+                                processSearchResult(foundTracks, errorMessage)
+                            }, remainingTime)
+                        } else {
+                            processSearchResult(foundTracks, errorMessage)
                         }
                     }
                 }
             })
     }
 
+    private fun processSearchResult(foundTracks: List<Track>?, errorMessage: String?) {
+        when {
+            errorMessage != null -> {
+                lastSearchResults = null
+                stateLiveData.value = SearchState.Error
+            }
+            foundTracks.isNullOrEmpty() -> {
+                lastSearchResults = null
+                stateLiveData.value = SearchState.Empty
+            }
+            else -> {
+                lastSearchResults = foundTracks
+                stateLiveData.value = SearchState.Content(foundTracks)
+            }
+        }
+    }
+
     fun onTrackClick(track: Track) {
         if (clickDebounce()) {
             searchHistoryInteractor.addTrackToHistory(track)
-            loadHistory()
+            if (currentQuery.isEmpty()) {
+                loadHistory()
+            }
         }
     }
 
@@ -131,5 +148,6 @@ class SearchViewModel(
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val PROGRESS_MIN_DISPLAY_TIME = 500L
     }
 }

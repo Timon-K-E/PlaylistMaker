@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.settings.ui
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +11,9 @@ import com.practicum.playlistmaker.settings.domain.ThemeSettings
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
 
     private val themeLiveData = MutableLiveData<Boolean>()
     fun observeTheme(): LiveData<Boolean> = themeLiveData
@@ -26,14 +31,38 @@ class SettingsViewModel(
     }
 
     fun shareApp() {
-        navigationCommandLiveData.value = Event(SettingsNavigationCommand.ShareApp)
+        if (clickDebounce()) {
+            navigationCommandLiveData.value = Event(SettingsNavigationCommand.ShareApp)
+        }
     }
 
     fun openSupport() {
-        navigationCommandLiveData.value = Event(SettingsNavigationCommand.OpenSupport)
+        if (clickDebounce()) {
+            navigationCommandLiveData.value = Event(SettingsNavigationCommand.OpenSupport)
+        }
     }
 
     fun openUserAgreement() {
-        navigationCommandLiveData.value = Event(SettingsNavigationCommand.OpenUserAgreement)
+        if (clickDebounce()) {
+            navigationCommandLiveData.value = Event(SettingsNavigationCommand.OpenUserAgreement)
+        }
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
+    override fun onCleared() {
+        handler.removeCallbacksAndMessages(null)
+        super.onCleared()
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 2000L
     }
 }

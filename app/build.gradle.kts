@@ -57,4 +57,6 @@ dependencies {
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.ktx)
+
+    implementation(libs.koin.android)
 }
