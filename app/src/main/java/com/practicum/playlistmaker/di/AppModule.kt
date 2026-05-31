@@ -47,13 +47,12 @@ val appModule = module {
 
     single { Gson() }
 
-    single<TracksRepository> { TracksRepositoryImpl(get()) }
-    single<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get(), get()) }
-    single<SettingsRepository> { SettingsRepositoryImpl(get()) }
-    single<SharingRepository> { SharingRepositoryImpl(androidContext()) }
-
-    single<TracksInteractor> { TracksInteractorImpl(get()) }
-    single<SearchHistoryInteractor> { SearchHistoryInteractorImpl(get()) }
-    single<SettingsInteractor> { SettingsInteractorImpl(get()) }
-    single<SharingInteractor> { SharingInteractorImpl(get()) }
+    factory<TracksRepository> { TracksRepositoryImpl(get()) }
+    factory<SearchHistoryRepository> { SearchHistoryRepositoryImpl(get(), get()) }
+    factory<SettingsRepository> { SettingsRepositoryImpl(get()) }
+    factory<SharingRepository> { SharingRepositoryImpl(androidContext()) }
+    factory<TracksInteractor> { TracksInteractorImpl(get()) }
+    factory<SearchHistoryInteractor> { SearchHistoryInteractorImpl(get()) }
+    factory<SettingsInteractor> { SettingsInteractorImpl(get()) }
+    factory<SharingInteractor> { SharingInteractorImpl(get()) }
 }

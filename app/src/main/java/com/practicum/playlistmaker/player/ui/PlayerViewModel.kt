@@ -98,6 +98,10 @@ class PlayerViewModel(
         return dateFormat.format(playerInteractor.getCurrentPosition())
     }
 
+    fun getCurrentPositionMillis(): Int {
+        return playerInteractor.getCurrentPosition()
+    }
+
     fun isPlaying(): Boolean {
         return playerInteractor.isPlaying()
     }

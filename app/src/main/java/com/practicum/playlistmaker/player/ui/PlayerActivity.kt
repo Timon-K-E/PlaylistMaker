@@ -68,7 +68,7 @@ class PlayerActivity : AppCompatActivity() {
             playButton.isVisible = false
             pauseButton.isVisible = true
             currentTime.text = viewModel.getCurrentPosition()
-        } else if (viewModel.getCurrentPosition() != "00:00") {
+        } else if (viewModel.getCurrentPositionMillis() > 0) {
             playButton.isVisible = true
             pauseButton.isVisible = false
             currentTime.text = viewModel.getCurrentPosition()
