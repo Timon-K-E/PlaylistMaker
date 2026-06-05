@@ -34,6 +34,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -59,4 +63,5 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
 
     implementation(libs.koin.android)
+
 }
