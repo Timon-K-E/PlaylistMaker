@@ -46,7 +46,9 @@
     <dimen name="element_margin_16">16dp</dimen>
     <dimen name="element_margin_24">24dp</dimen>
     <dimen name="element_margin_30">30dp</dimen>
+    <dimen name="element_margin_46">46dp</dimen>
     <dimen name="element_margin_50">50dp</dimen>
+    <dimen name="element_margin_106">106dp</dimen>
     <dimen name="track_cover_margin_size">45dp</dimen>
 
     <!-- Отступы внутри элемента -->
