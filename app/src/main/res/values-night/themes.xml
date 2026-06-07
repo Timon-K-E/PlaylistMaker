@@ -22,6 +22,6 @@
         <item name="switchThumbColorUnchecked">@color/gray</item>
 
 
-
+        <item name="bottomNavigationStyle">@style/BottomNavigationStyleNight</item>
     </style>
 </resources>

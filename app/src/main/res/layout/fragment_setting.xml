@@ -11,10 +11,6 @@
     <LinearLayout
         style="@style/LinearLayoutHeader">
 
-        <Button
-            android:id="@+id/back_setting"
-            style="@style/ButtonBack"/>
-
         <TextView
             style="@style/TextViewtHeader"
             android:text="@string/settings" />

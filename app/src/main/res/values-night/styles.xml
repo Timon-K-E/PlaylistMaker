@@ -116,5 +116,11 @@
         <item name="android:layout_marginEnd">@dimen/element_margin_8</item>
     </style>
 
+    <style name="BottomNavigationStyleNight" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_color_night</item>
+        <item name="itemTextColor">@color/bottom_nav_color_night</item>
+        <item name="itemBackground">@color/black</item>
+    </style>
+
 </resources>
 

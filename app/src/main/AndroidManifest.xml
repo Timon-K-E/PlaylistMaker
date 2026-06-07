@@ -13,22 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PlaylistMaker">
-
-        <activity
-            android:name=".search.ui.SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".library.ui.LibraryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".settings.ui.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".player.ui.PlayerActivity"
-            android:exported="false" />
         <activity
             android:name=".main.ui.MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
