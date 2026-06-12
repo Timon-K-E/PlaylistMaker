@@ -80,11 +80,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
 
         _binding = null
     }
+
     private fun setupAdapters() {
 
         trackAdapter = TrackAdapter(trackList) { track ->
@@ -148,7 +150,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.placeholderNothingFound.isVisible = state is SearchState.Empty
         binding.placeholderNetworkError.isVisible = state is SearchState.Error
         binding.recyclerViewTrack.isVisible = state is SearchState.Content
-        binding.searchHistory.isVisible = state is SearchState.History && binding.searchEditText.text.isEmpty()
+        binding.searchHistory.isVisible =
+            state is SearchState.History && binding.searchEditText.text.isEmpty()
 
         when (state) {
             is SearchState.Content -> {
@@ -171,7 +174,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         findNavController().navigate(
             R.id.action_searchFragment_to_playerFragment,
             PlayerFragment.createArgs(track)
-            )
+        )
     }
 
     private fun hideKeyboard() {

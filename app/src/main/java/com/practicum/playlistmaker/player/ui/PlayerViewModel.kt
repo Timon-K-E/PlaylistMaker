@@ -173,6 +173,6 @@ class PlayerViewModel(
     }
 
     companion object {
-        private const val UPDATE_DELAY = 200L
+        private const val UPDATE_DELAY = 300L
     }
 }
