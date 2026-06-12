@@ -1,18 +1,20 @@
 package com.practicum.playlistmaker.settings.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.settings.domain.ThemeSettings
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.lifecycle.viewModelScope
 
 class SettingsViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var clickJob: Job? = null
     private var isClickAllowed = true
 
     private val themeLiveData = MutableLiveData<Boolean>()
@@ -52,13 +54,17 @@ class SettingsViewModel(
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            clickJob?.cancel()
+            clickJob = viewModelScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
 
     override fun onCleared() {
-        handler.removeCallbacksAndMessages(null)
+        clickJob?.cancel()
         super.onCleared()
     }
 
