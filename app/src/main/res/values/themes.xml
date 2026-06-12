@@ -3,7 +3,7 @@
 
     <style name="Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
                             <!--background главного экрана (меняется при тёмной теме)-->
-        <item name="colorPrimary">@color/blue_main_screen</item>
+        <item name="colorPrimary">@color/blue</item>
                             <!--Всё что должно быть белым, всегда -->
         <item name="colorOnPrimary">@color/white</item>
 
@@ -22,6 +22,6 @@
         <item name="switchTrackColorUnchecked">@color/gray_bg_search</item>
         <item name="switchThumbColorUnchecked">@color/gray</item>
 
-
+        <item name="bottomNavigationStyle">@style/BottomNavigationStyleLight</item>
     </style>
 </resources>

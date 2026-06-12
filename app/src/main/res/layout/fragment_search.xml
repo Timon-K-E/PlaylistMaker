@@ -11,11 +11,6 @@
 
     <LinearLayout
         style="@style/LinearLayoutHeader">
-
-        <Button
-            android:id="@+id/back_screen_search"
-            style="@style/ButtonBack"/>
-
         <TextView
             style="@style/TextViewtHeader"
             android:text="@string/search" />

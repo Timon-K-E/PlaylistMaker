@@ -4,7 +4,7 @@
 
     <size android:width="2dp" />
 
-    <solid android:color="@color/blue_main_screen" />
+    <solid android:color="@color/blue" />
     <corners android:radius="2dp" />
 
 </shape>

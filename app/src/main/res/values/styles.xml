@@ -166,4 +166,23 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="BottomNavigationStyleLight" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_color_light</item>
+        <item name="itemTextColor">@color/bottom_nav_color_light</item>
+        <item name="itemBackground">@color/white</item>
+    </style>
+
+    <style name="BottomNavTextInactive">
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/bottom_nav_color_light</item>
+    </style>
+
+
+    <style name="BottomNavTextActive">
+        <item name="android:textSize">@dimen/text_size_12</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/bottom_nav_color_light</item>
+    </style>
+
 </resources>
