@@ -10,7 +10,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.search.domain.Resource
 import kotlinx.coroutines.flow.collect
 class SearchViewModel(
     private val tracksInteractor: TracksInteractor,
@@ -59,17 +58,11 @@ class SearchViewModel(
         var errorMessage: String? = null
 
         tracksInteractor.searchTracks(currentQuery)
-            .collect { resource ->
-
-                when (resource) {
-
-                    is Resource.Success -> {
-                        foundTracks = resource.data
-                    }
-
-                    is Resource.Error -> {
-                        errorMessage = resource.message
-                    }
+            .collect { result ->
+                result.onSuccess { tracks ->
+                    foundTracks = tracks
+                }.onFailure { exception ->
+                    errorMessage = exception.message
                 }
             }
 
