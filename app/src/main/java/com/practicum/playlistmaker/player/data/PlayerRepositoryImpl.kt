@@ -4,53 +4,44 @@ import android.media.MediaPlayer
 import com.practicum.playlistmaker.player.domain.PlayerRepository
 
 class PlayerRepositoryImpl(
-    private var mediaPlayer: MediaPlayer
+    private val mediaPlayer: MediaPlayer
 ) : PlayerRepository {
 
-    private var isReleased = false
-
     override fun prepare(url: String, onPrepared: () -> Unit) {
-        if (isReleased) {
-            mediaPlayer = MediaPlayer()
-            isReleased = false
-        }
+        mediaPlayer.reset()
+
         mediaPlayer.apply {
             setDataSource(url)
+            setOnPreparedListener {
+                onPrepared()
+            }
             prepareAsync()
-            setOnPreparedListener { onPrepared() }
         }
     }
 
     override fun start() {
-        if (!isReleased) {
-            mediaPlayer.start()
-        }
+        mediaPlayer.start()
     }
 
     override fun pause() {
-        if (!isReleased) {
-            mediaPlayer.pause()
-        }
+        mediaPlayer.pause()
     }
 
     override fun release() {
-        if (!isReleased) {
-            mediaPlayer.release()
-            isReleased = true
-        }
+        mediaPlayer.release()
     }
 
     override fun getCurrentPosition(): Int {
-        return if (!isReleased) mediaPlayer.currentPosition else 0
+        return mediaPlayer.currentPosition
     }
 
     override fun isPlaying(): Boolean {
-        return if (!isReleased) mediaPlayer.isPlaying else false
+        return mediaPlayer.isPlaying
     }
 
     override fun setOnCompletionListener(listener: () -> Unit) {
-        if (!isReleased) {
-            mediaPlayer.setOnCompletionListener { listener() }
+        mediaPlayer.setOnCompletionListener {
+            listener()
         }
     }
 }

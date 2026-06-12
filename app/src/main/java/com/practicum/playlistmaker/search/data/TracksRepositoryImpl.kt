@@ -2,30 +2,29 @@ package com.practicum.playlistmaker.search.data
 
 import com.practicum.playlistmaker.search.domain.Track
 import com.practicum.playlistmaker.search.domain.TracksRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import com.practicum.playlistmaker.search.domain.Resource
 
-class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+class TracksRepositoryImpl(
+    private val networkClient: NetworkClient
+) : TracksRepository {
 
-    override fun searchTrack(expression: String, callback: (List<Track>?, String?) -> Unit) {
+    override fun searchTrack(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TrackSearchRequest(expression))
 
         when (response.resultCode) {
             -1 -> {
-                callback(null, "Проверьте подключение к интернету")
+                emit(Resource.Error("Проверьте подключение к интернету"))
             }
 
             200 -> {
                 val iTunesResponse = response as ITunesResponse
-
-                if (iTunesResponse.results.isNotEmpty()) {
-                    val tracks = iTunesResponse.results.map { TrackMapper.mapToTrack(it) }
-                    callback(tracks, null)
-                } else {
-                    callback(emptyList(), null)
-                }
+                emit(Resource.Success(iTunesResponse.results.map { TrackMapper.mapToTrack(it) }))
             }
 
             else -> {
-                callback(null, "Ошибка сервера")
+                emit(Resource.Error("Ошибка сервера"))
             }
         }
     }
