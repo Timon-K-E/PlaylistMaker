@@ -44,6 +44,8 @@ class TrackAdapter(
             Glide.with(itemView.context)
                 .load(track.artworkUrl100)
                 .placeholder(R.drawable.ic_placeholder_cover)
+                .error(R.drawable.ic_placeholder_cover)
+                .fallback(R.drawable.ic_placeholder_cover)
                 .centerCrop()
                 .transform(RoundedCorners(
                     itemView.resources.getDimensionPixelSize(R.dimen.track_cover_corner_radius)

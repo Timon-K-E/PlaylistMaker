@@ -11,7 +11,7 @@
     <color name="thumb_color_selector_light">#AEAFB4</color>
     <color name="track_color_selector_light">#E6E8EB</color>
     <color name="thumb_color_selector_night">#3772E7</color>
-    <color name="track_color_selector_night">#9FBBF3</color> <!-- тут вопрос! раньше был цвет для трека:#9FBBF3, сейчас указывается
-    #3772E7, но с непрезрачностью 48% не нашел как сделать непрозрачноть или прозрачность, оставил как было-->
+    <color name="track_color_selector_night">#9FBBF3</color>
     <color name="blue_progress_bar">#3772E7</color>
 </resources>
+

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
+    android:fitsSystemWindows="true"
     android:theme="@style/Theme.PlaylistMaker">
 
     <Button
@@ -113,9 +114,9 @@
                 android:id="@+id/addToPlaylistButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_circle_background_54"
+                android:background="@drawable/ic_circle_background_51"
                 android:scaleType="center"
-                android:src="@drawable/ic_add_to_playlist_23"
+                android:src="@drawable/ic_add_to_playlist_51_51"
                 app:layout_constraintBottom_toBottomOf="@id/buttonsContainer"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintStart_toStartOf="@id/leftGuideline"
@@ -125,9 +126,9 @@
                 android:id="@+id/addToFavoritesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/ic_circle_background_54"
+                android:background="@drawable/ic_circle_background_51"
                 android:scaleType="center"
-                android:src="@drawable/ic_favorite_border_25_23"
+                android:src="@drawable/ic_favorite_border_51_51"
                 app:layout_constraintBottom_toBottomOf="@id/buttonsContainer"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="@id/rightGuideline"

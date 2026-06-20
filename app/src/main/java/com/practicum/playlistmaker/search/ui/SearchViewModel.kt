@@ -10,10 +10,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackInteractor
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+
 class SearchViewModel(
     private val tracksInteractor: TracksInteractor,
-    private val searchHistoryInteractor: SearchHistoryInteractor
+    private val searchHistoryInteractor: SearchHistoryInteractor,
+    private val favoriteTrackInteractor: FavoriteTrackInteractor
 ) : ViewModel() {
     private var searchJob: Job? = null
     private var clickJob: Job? = null
@@ -23,13 +27,37 @@ class SearchViewModel(
     private var lastSearchResults: List<Track>? = null
     private var progressStartTime = 0L
 
+    private var favoriteIdsFlowJob: Job? = null
+    private val favoriteIds = mutableListOf<Long>()
+
     private val stateLiveData = MutableLiveData<SearchState>()
     fun observeState(): LiveData<SearchState> = stateLiveData
 
     init {
         loadHistory()
+        subscribeToFavoriteIds()
     }
 
+    private fun subscribeToFavoriteIds() {
+        favoriteIdsFlowJob = viewModelScope.launch {
+            favoriteTrackInteractor.getFavoriteIdsFlow()
+                .collectLatest { ids ->
+                    favoriteIds.clear()
+                    favoriteIds.addAll(ids)
+                    lastSearchResults?.let { tracks ->
+                        val updatedTracks = updateFavoriteStatus(tracks)
+                        stateLiveData.value = SearchState.Content(updatedTracks)
+                        lastSearchResults = updatedTracks
+                    }
+                }
+        }
+    }
+
+    private fun updateFavoriteStatus(tracks: List<Track>): List<Track> {
+        return tracks.map { track ->
+            track.copy(isFavorite = favoriteIds.contains(track.trackId))
+        }
+    }
     fun searchDebounce(query: String) {
         if (currentQuery == query && lastSearchResults != null) {
             return
@@ -60,6 +88,7 @@ class SearchViewModel(
         tracksInteractor.searchTracks(currentQuery)
             .collect { result ->
                 result.onSuccess { tracks ->
+                    val enrichedTracks = updateFavoriteStatus(tracks)
                     foundTracks = tracks
                 }.onFailure { exception ->
                     errorMessage = exception.message
@@ -117,6 +146,7 @@ class SearchViewModel(
     fun loadHistory() {
         if (currentQuery.isEmpty()) {
             val history = searchHistoryInteractor.getHistory()
+            val enrichedHistory = updateFavoriteStatus(history)
             if (history.isNotEmpty()) {
                 stateLiveData.value = SearchState.History(history)
             } else {
@@ -152,6 +182,7 @@ class SearchViewModel(
         searchJob?.cancel()
         clickJob?.cancel()
         progressJob?.cancel()
+        favoriteIdsFlowJob?.cancel()
         super.onCleared()
     }
 

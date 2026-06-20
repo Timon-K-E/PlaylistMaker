@@ -2,7 +2,19 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.media.MediaPlayer
+import androidx.room.Room
 import com.google.gson.Gson
+import com.practicum.playlistmaker.favorite.data.db.AppDatabase
+import com.practicum.playlistmaker.favorite.data.db.TrackDbConvertor
+import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackInteractor
+import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackRepository
+import com.practicum.playlistmaker.favorite.domain.db.FavoriteTracksInteractorImpl
+import com.practicum.playlistmaker.favorite.domain.db.FavoriteTracksRepositoryImpl
+import com.practicum.playlistmaker.player.data.PlayerRepositoryImpl
+import com.practicum.playlistmaker.player.domain.PlayerInteractor
+import com.practicum.playlistmaker.player.domain.PlayerInteractorImpl
+import com.practicum.playlistmaker.player.domain.PlayerRepository
 import com.practicum.playlistmaker.search.data.ITunesApiService
 import com.practicum.playlistmaker.search.data.NetworkClient
 import com.practicum.playlistmaker.search.data.RetrofitNetworkClient
@@ -52,7 +64,37 @@ val appModule = module {
     factory<SettingsRepository> { SettingsRepositoryImpl(get()) }
     factory<SharingRepository> { SharingRepositoryImpl(androidContext()) }
     factory<TracksInteractor> { TracksInteractorImpl(get()) }
-    factory<SearchHistoryInteractor> { SearchHistoryInteractorImpl(get()) }
+    factory<SearchHistoryInteractor> {
+        SearchHistoryInteractorImpl(
+            repository = get(),
+            favoriteTrackInteractor = get()
+        )
+    }
     factory<SettingsInteractor> { SettingsInteractorImpl(get()) }
     factory<SharingInteractor> { SharingInteractorImpl(get()) }
+
+    factory<PlayerRepository> { PlayerRepositoryImpl(MediaPlayer()) }
+    factory<PlayerInteractor> { PlayerInteractorImpl(get()) }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .build()
+    }
+
+    single { get<AppDatabase>().favoriteTracksDao() }
+
+    factory { TrackDbConvertor() }
+
+    single<FavoriteTrackRepository> {
+        FavoriteTracksRepositoryImpl(
+            favoriteTracksDao = get(),
+            trackDbConvertor = get()
+        )
+    }
+
+
+    single<FavoriteTrackInteractor> {
+        FavoriteTracksInteractorImpl(get())
+    }
+
 }
