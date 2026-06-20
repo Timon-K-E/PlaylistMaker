@@ -37,6 +37,8 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         binding.backScreenWalkman.setOnClickListener { findNavController().navigateUp() }
         binding.playButton.setOnClickListener { viewModel.playButtonClicked() }
         binding.pauseButton.setOnClickListener { viewModel.pauseButtonClicked() }
+
+        binding.addToFavoritesButton.setOnClickListener { viewModel.onFavoriteButtonClicked() }
     }
 
     override fun onStart() {
@@ -51,6 +53,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
             binding.timePlay.text = viewModel.getCurrentPosition()
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         if (!requireActivity().isChangingConfigurations) {
@@ -73,6 +76,18 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
 
         viewModel.observeState().observe(viewLifecycleOwner) { state ->
             renderState(state)
+        }
+
+        viewModel.observeFavoriteState().observe(viewLifecycleOwner) { isFavorite ->
+            updateFavoriteButton(isFavorite)
+        }
+    }
+
+    private fun updateFavoriteButton(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.addToFavoritesButton.setImageResource(R.drawable.ic_activ_favorite_border_51_51)
+        } else {
+            binding.addToFavoritesButton.setImageResource(R.drawable.ic_favorite_border_51_51)
         }
     }
 
@@ -145,6 +160,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
             .placeholder(R.drawable.ic_placeholder_cover)
             .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.radius_size_8)))
             .into(binding.albumCover)
+
     }
 
     companion object {

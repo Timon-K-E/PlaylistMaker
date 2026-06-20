@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackInteractor
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.PlayerState
 import com.practicum.playlistmaker.search.domain.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -16,10 +18,12 @@ import java.util.Locale
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
+    private val favoriteTrackInteractor: FavoriteTrackInteractor,
     private val track: Track
 ) : ViewModel() {
 
     private var timerJob: Job? = null
+    private var favoriteStatusJob: Job? = null
 
     private var isPrepared = false
     private var currentPlayerState: PlayerState = PlayerState.Default
@@ -38,9 +42,13 @@ class PlayerViewModel(
     private val trackLiveData = MutableLiveData<Track>()
     fun observeTrack(): LiveData<Track> = trackLiveData
 
+    private val favoriteStateLiveData = MutableLiveData<Boolean>()
+    fun observeFavoriteState(): LiveData<Boolean> = favoriteStateLiveData
+
     init {
         trackLiveData.value = track
         preparePlayer()
+        subscribeToFavoriteStatus()
     }
 
     private fun preparePlayer() {
@@ -61,13 +69,10 @@ class PlayerViewModel(
     }
 
     fun playButtonClicked() {
-
         when (currentPlayerState) {
-
             PlayerState.Completion -> {
                 restartTrack()
             }
-
             else -> {
                 if (isPrepared) {
                     playerInteractor.startPlayer()
@@ -163,6 +168,27 @@ class PlayerViewModel(
     private fun stopTimer() {
         timerJob?.cancel()
         timerJob = null
+    }
+
+    private fun subscribeToFavoriteStatus() {
+        favoriteStatusJob = viewModelScope.launch {
+            favoriteTrackInteractor.getFavoriteIdsFlow()
+                .collectLatest { ids ->
+                    val isFavorite = ids.contains(track.trackId)
+                    favoriteStateLiveData.postValue(isFavorite)
+                }
+        }
+    }
+
+    fun onFavoriteButtonClicked() {
+        viewModelScope.launch {
+            val currentState = favoriteStateLiveData.value ?: false
+            if (currentState) {
+                  favoriteTrackInteractor.removeTrackFromFavorites(track)
+            } else {
+                favoriteTrackInteractor.addTrackToFavorites(track)
+            }
+        }
     }
 
     override fun onCleared() {
