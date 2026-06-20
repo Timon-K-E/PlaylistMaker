@@ -86,7 +86,10 @@ val appModule = module {
     factory { TrackDbConvertor() }
 
     single<FavoriteTrackRepository> {
-        FavoriteTracksRepositoryImpl(get(), get())
+        FavoriteTracksRepositoryImpl(
+            favoriteTracksDao = get(),
+            trackDbConvertor = get()
+        )
     }
 
 

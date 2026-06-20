@@ -2,52 +2,54 @@ package com.practicum.playlistmaker.favorite.domain.db
 
 
 import com.practicum.playlistmaker.favorite.data.db.AppDatabase
+import com.practicum.playlistmaker.favorite.data.db.dao.FavoriteTracksDao
 import com.practicum.playlistmaker.favorite.data.db.TrackDbConvertor
 import com.practicum.playlistmaker.favorite.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.search.domain.Track
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.first
 
 class FavoriteTracksRepositoryImpl
     (
-    private val appDatabase: AppDatabase,
+    private val favoriteTracksDao: FavoriteTracksDao,
     private val trackDbConvertor: TrackDbConvertor,
 
     ): FavoriteTrackRepository {
 
     override suspend fun addTrackToFavorites(track: Track) {
-        val trackEntity = trackDbConvertor.map(track)
-        appDatabase.favoriteTracksDao().insertTrack(trackEntity)
+        val trackEntity = trackDbConvertor.map(track,System.currentTimeMillis())
+        favoriteTracksDao.insertTrack(trackEntity)
     }
 
     override suspend fun removeTrackFromFavorites(track: Track) {
-        val trackEntity = appDatabase.favoriteTracksDao().getTrackById(track.trackId)
+        val trackEntity = favoriteTracksDao.getTrackById(track.trackId)
         trackEntity?.let {
-            appDatabase.favoriteTracksDao().deleteTrack(it)
+            favoriteTracksDao.deleteTrack(it)
         }
 
     }
 
     override fun getFavoriteTracks(): Flow<List<Track>> {
-        return appDatabase.favoriteTracksDao().getAllTracks().map { tracks -> convertFromTrackEntity(tracks)
-        }
+        return favoriteTracksDao.getAllTracks()
+            .map { entities ->
+                entities.map { trackDbConvertor.map(it) }
+            }
+            .distinctUntilChanged()
     }
 
     override suspend fun getAllFavoriteIds(): List<Long> {
-        return appDatabase.favoriteTracksDao().getAllIdsFlow().first()//
-    }
-
-    private fun convertFromTrackEntity(tracks: List<TrackEntity>): List<Track> {
-        return tracks.map {  trackEntity -> trackDbConvertor.map(trackEntity) }
+        return favoriteTracksDao.getAllIdsFlow().first()
     }
 
     override fun getFavoriteIdsFlow(): Flow<List<Long>> {
-        return appDatabase.favoriteTracksDao().getAllIdsFlow()
+        return favoriteTracksDao.getAllIdsFlow()
+            .distinctUntilChanged()
     }
 
     override suspend fun isTrackFavorite(trackId: Long): Boolean {
-        return appDatabase.favoriteTracksDao().getTrackById(trackId) != null
+        return favoriteTracksDao.getTrackById(trackId) != null
     }
 
 

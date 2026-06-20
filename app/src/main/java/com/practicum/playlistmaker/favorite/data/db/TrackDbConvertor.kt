@@ -5,7 +5,7 @@ import com.practicum.playlistmaker.search.domain.Track
 
 class TrackDbConvertor {
 
-    fun map(track: Track): TrackEntity {
+    fun map(track: Track, addedTimestamp: Long ): TrackEntity {
         return TrackEntity(
             trackId = track.trackId,
             artworkUrl100 = track.artworkUrl100,
@@ -18,7 +18,7 @@ class TrackDbConvertor {
             previewUrl = track.previewUrl,
             trackTimeMillis = track.trackTimeMillis,
             formattedTime = track.formattedTime,
-            addedTimestamp = System.currentTimeMillis()
+            addedTimestamp = addedTimestamp
         )
     }
 
