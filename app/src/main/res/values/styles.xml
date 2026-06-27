@@ -185,4 +185,47 @@
         <item name="android:textColor">@color/bottom_nav_color_light</item>
     </style>
 
+    <style name="TextInputLayoutStyle" >
+        <item name="boxBackgroundMode">outline</item>
+        <item name="boxCornerRadiusTopStart">4dp</item>
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="boxCornerRadiusBottomStart">4dp</item>
+        <item name="boxCornerRadiusBottomEnd">4dp</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeColor">?attr/colorOnSurfaceVariant</item>
+        <item name="hintTextColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">40sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="TextInputEditTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:backgroundTint">?attr/android:windowBackground</item>
+        <item name="android:paddingTop">18dp</item>
+        <item name="android:paddingBottom">19dp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextInputEditTextTitleStyle" parent="TextInputEditTextStyle">
+        <item name="android:inputType">text</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="TextInputEditTextDescriptionStyle" parent="TextInputEditTextStyle">
+        <item name="android:inputType">textMultiLine</item>
+        <item name="android:gravity">top|start</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
+
+    <style name="HintTextStyle">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
 </resources>

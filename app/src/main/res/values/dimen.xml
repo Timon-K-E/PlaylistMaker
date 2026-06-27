@@ -27,11 +27,13 @@
     <!-- Размер высоты -->
     <dimen name="layout_height">36dp</dimen>
     <dimen name="layout_height_52">52dp</dimen>
+    <dimen name="layout_height_44">44dp</dimen>
 
 
     <!-- Размер отступов для заголовков -->
     <dimen name="title_padding_top">14dp</dimen>
     <dimen name="title_padding_bottom">16dp</dimen>
+    <dimen name="element_padding_33">33dp</dimen>
 
     <!-- Размер отступов для switch -->
     <dimen name="switch_padding_end">15dp</dimen>
@@ -46,7 +48,10 @@
     <dimen name="element_margin_16">16dp</dimen>
     <dimen name="element_margin_20">20dp</dimen>
     <dimen name="element_margin_24">24dp</dimen>
+    <dimen name="element_margin_26">26dp</dimen>
     <dimen name="element_margin_30">30dp</dimen>
+    <dimen name="element_margin_32">32dp</dimen>
+    <dimen name="element_margin_33">33dp</dimen>
     <dimen name="element_margin_46">46dp</dimen>
     <dimen name="element_margin_50">50dp</dimen>
     <dimen name="element_margin_106">106dp</dimen>

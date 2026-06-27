@@ -48,5 +48,10 @@
     <string name="no_playlists_message">Вы не создали\nни одного плейлиста</string>
     <string name="no_favorites_message">Ваша медиатека пуста</string>
 
+    <string name="playlist_name_hint">Название*</string>
+    <string name="playlist_description_hint">Описание</string>
+    <string name="create_button">Создать</string>
+
+
 
 </resources>
