@@ -16,6 +16,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.library.domain.PlaylistsState
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.navigation.fragment.findNavController
 
 class PlaylistsFragment : Fragment() {
 
@@ -43,6 +44,12 @@ class PlaylistsFragment : Fragment() {
         placeholderText = view.findViewById(R.id.placeholder_text)
 
         setupPlaceholder()
+
+        buttonNewPlaylist.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_newPlaylistFragment
+            )
+        }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             renderState(state)
