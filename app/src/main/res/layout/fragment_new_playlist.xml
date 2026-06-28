@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="center"
-                    android:src="@drawable/ic_add_photo_100_100" />
+                                        android:src="@drawable/ic_add_photo_100_100" />
 
             </FrameLayout>
 

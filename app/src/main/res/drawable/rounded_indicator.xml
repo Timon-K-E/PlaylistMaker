@@ -1,0 +1,4 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/gray_bg_search"/>
+    <corners android:radius="@dimen/radius_size_44"/>
+</shape>

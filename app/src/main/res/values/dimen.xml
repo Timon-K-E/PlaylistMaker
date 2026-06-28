@@ -4,7 +4,11 @@
     <!-- Радиусы -->
     <dimen name="radius_size_16">16dp</dimen>
     <dimen name="radius_size_8">8dp</dimen>
+    <dimen name="radius_size_44">44dp</dimen>
     <dimen name="radius_size_54">54dp</dimen>
+    <dimen name="radius_size_4">4dp</dimen>
+    <dimen name="radius_size_2">2dp</dimen>
+
     <!-- Звкругление обложки трека -->
     <dimen name="track_cover_corner_radius">2dp</dimen>
 
@@ -41,6 +45,7 @@
     <!-- Отступы между элементами -->
     <dimen name="element_margin_1">1dp</dimen>
     <dimen name="element_margin_4">4dp</dimen>
+    <dimen name="element_margin_7">7dp</dimen>
     <dimen name="element_margin_8">8dp</dimen>
     <dimen name="element_margin_12">12dp</dimen>
     <dimen name="element_margin_13">13dp</dimen>
@@ -49,6 +54,7 @@
     <dimen name="element_margin_20">20dp</dimen>
     <dimen name="element_margin_24">24dp</dimen>
     <dimen name="element_margin_26">26dp</dimen>
+    <dimen name="element_margin_28">28dp</dimen>
     <dimen name="element_margin_30">30dp</dimen>
     <dimen name="element_margin_32">32dp</dimen>
     <dimen name="element_margin_33">33dp</dimen>
@@ -62,7 +68,10 @@
     <dimen name="element_padding_12">12dp</dimen>
     <dimen name="element_padding_16">16dp</dimen>
     <dimen name="element_padding_21">21dp</dimen>
+    <dimen name="element_padding_24">24dp</dimen>
 
 
+    <dimen name="bottom_sheet_peek_height">300dp</dimen>
+    <dimen name="dialog_width">300dp</dimen>
 
 </resources>

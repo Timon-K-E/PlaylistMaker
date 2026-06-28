@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackInteractor
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.PlayerState
+import com.practicum.playlistmaker.playlists.domain.Playlist
+import com.practicum.playlistmaker.playlists.domain.PlaylistInteractor
 import com.practicum.playlistmaker.search.domain.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -19,6 +21,7 @@ import java.util.Locale
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
     private val favoriteTrackInteractor: FavoriteTrackInteractor,
+    private val playlistInteractor: PlaylistInteractor,
     private val track: Track
 ) : ViewModel() {
 
@@ -44,6 +47,21 @@ class PlayerViewModel(
 
     private val favoriteStateLiveData = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = favoriteStateLiveData
+
+    // LiveData для списка плейлистов
+    private val _playlists = MutableLiveData<List<Playlist>>(emptyList())
+    val playlists: LiveData<List<Playlist>> = _playlists
+
+    // Метод для загрузки плейлистов
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor.getPlaylists()
+                .collectLatest { playlists ->
+                    _playlists.value = playlists
+                }
+        }
+    }
+    // =====================================
 
     init {
         trackLiveData.value = track

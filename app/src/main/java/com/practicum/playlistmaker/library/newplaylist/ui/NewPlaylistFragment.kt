@@ -1,46 +1,200 @@
 package com.practicum.playlistmaker.library.newplaylist.ui
 
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentNewPlaylistBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import androidx.activity.OnBackPressedCallback
 
 class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
 
     private var _binding: FragmentNewPlaylistBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: NewPlaylistViewModel by viewModel()
+
+    private var exitDialog: AlertDialog? = null
+
+    private val photoPickerLauncher = registerForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        uri?.let {
+            viewModel.updateCoverUri(it)
+            showCoverImage(it)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentNewPlaylistBinding.bind(view)
 
-        //hideSystemBars()
+        setupClickListeners()
+        setupTextWatchers()
+        observeViewModel()
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    viewModel.onBackPressed()
+                }
+            }
+        )
+    }
+
+    private fun setupClickListeners() {
         binding.backButton.setOnClickListener {
-            findNavController().navigateUp()
+            viewModel.onBackPressed()
         }
 
-        // Кнопка "Создать" (пока отключена)
+        binding.coverContainer.setOnClickListener {
+            photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+
         binding.createButton.setOnClickListener {
-            // Здесь будет логика создания плейлиста
-            // Позже добавим
+            viewModel.onCreatePlaylistClicked(requireContext())
         }
     }
 
-    private fun hideSystemBars() {
-        val window = requireActivity().window
-        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+    private fun setupTextWatchers() {
+        binding.titleLayout.editText?.apply {
+            addTextChangedListener(
+                object : android.text.TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                    override fun afterTextChanged(s: android.text.Editable?) {
+                        viewModel.updatePlaylistName(s?.toString() ?: "")
+                    }
+                }
+            )
+        }
 
-        insetsController.hide(WindowInsetsCompat.Type.navigationBars())
-        insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        binding.descriptionLayout.editText?.apply {
+            addTextChangedListener(
+                object : android.text.TextWatcher {
+                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                    override fun afterTextChanged(s: android.text.Editable?) {
+                        viewModel.updatePlaylistDescription(s?.toString() ?: "")
+                    }
+                }
+            )
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.isCreateButtonEnabled.observe(viewLifecycleOwner) { enabled ->
+            binding.createButton.isEnabled = enabled
+        }
+
+        viewModel.coverUri.observe(viewLifecycleOwner) { uri ->
+            uri?.let { showCoverImage(it) }
+        }
+
+        viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
+            event?.let {
+                when (it) {
+                    NewPlaylistViewModel.NavigationEvent.NavigateBack -> {
+                        findNavController().navigateUp()
+                        viewModel.onNavigationHandled()
+                    }
+                    NewPlaylistViewModel.NavigationEvent.ShowExitDialog -> {
+                        showExitDialog()
+                        viewModel.onNavigationHandled()
+                    }
+                    NewPlaylistViewModel.NavigationEvent.DismissDialog -> {
+                        exitDialog?.dismiss()
+                        viewModel.onNavigationHandled()
+                    }
+                }
+            }
+        }
+
+        viewModel.showSuccessToast.observe(viewLifecycleOwner) { message ->
+            message?.let {
+                showCustomToast(it)
+                viewModel.onToastShown()
+            }
+        }
+    }
+
+    private fun showCustomToast(message: String) {
+        val inflater = layoutInflater
+        val layout = inflater.inflate(R.layout.custom_toast_layout, null)
+
+        val textView = layout.findViewById<TextView>(R.id.tv_toast_message)
+        textView.text = message
+        //textView.textSize = 14f
+
+        val toast = Toast(requireContext())
+        toast.duration = Toast.LENGTH_LONG
+        toast.view = layout
+
+        val offsetPx = (0 * resources.displayMetrics.density).toInt()
+        toast.setGravity(Gravity.BOTTOM, 0, offsetPx)
+
+        toast.show()
+    }
+
+    private fun showCoverImage(uri: Uri) {
+        binding.albumCover.scaleType = ImageView.ScaleType.CENTER_CROP
+
+
+        val radius = resources.getDimensionPixelSize(R.dimen.radius_size_8)
+
+        Glide.with(this)
+            .load(uri)
+            .transform(
+                com.bumptech.glide.load.resource.bitmap.CenterCrop(),
+                RoundedCorners(radius)
+            )
+            .into(binding.albumCover)
+    }
+
+    private fun showExitDialog() {
+        val dialogView = layoutInflater.inflate(
+            R.layout.dialog_exit_playlist,
+            null
+        )
+
+        exitDialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialogView.findViewById<Button>(R.id.btnFinish).setOnClickListener {
+            viewModel.onExitDialogConfirmed()
+            exitDialog?.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+            viewModel.onExitDialogCancelled()
+            exitDialog?.dismiss()
+        }
+
+        exitDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        exitDialog?.show()
     }
 
     override fun onDestroyView() {
+        exitDialog?.dismiss()
+        exitDialog = null
         super.onDestroyView()
         _binding = null
     }
