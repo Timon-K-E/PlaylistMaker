@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
-import com.practicum.playlistmaker.library.ui.PlaylistAdapter
 import com.practicum.playlistmaker.playlists.domain.Playlist
 
 class PlayerFragment : Fragment(R.layout.fragment_player) {

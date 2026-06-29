@@ -20,10 +20,8 @@ class NewPlaylistViewModel(
 ) : ViewModel() {
 
     private val _playlistName = MutableLiveData("")
-    val playlistName: LiveData<String> = _playlistName
 
     private val _playlistDescription = MutableLiveData("")
-    val playlistDescription: LiveData<String> = _playlistDescription
 
     private val _coverUri = MutableLiveData<Uri?>(null)
     val coverUri: LiveData<Uri?> = _coverUri
@@ -75,7 +73,6 @@ class NewPlaylistViewModel(
                 coverPath = coverPath
             )
 
-            val id = playlistInteractor.createPlaylist(playlist)
 
             _showSuccessToast.postValue("Плейлист $name создан")
             _navigationEvent.postValue(NavigationEvent.NavigateBack)

@@ -20,12 +20,14 @@
         android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/element_padding_16"
-        android:layout_marginStart="@dimen/element_margin_16"
-        android:layout_marginEnd="@dimen/element_margin_16"
+
         android:visibility="visible"
         tools:visibility="visible"
         tools:itemCount="4"
-        tools:listitem="@layout/item_playlist"/>
+        tools:listitem="@layout/item_playlist"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:spanCount="2">
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/placeholder_container"
@@ -33,7 +35,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/placeholder_image"

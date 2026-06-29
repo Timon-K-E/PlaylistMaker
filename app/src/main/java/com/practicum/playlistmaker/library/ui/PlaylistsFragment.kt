@@ -37,6 +37,9 @@ class PlaylistsFragment : Fragment() {
         setupPlaceholder()
         setupRecyclerView()
 
+        playlistAdapter = PlaylistAdapter(emptyList())
+        binding.rvPlaylists.adapter = playlistAdapter
+
         binding.buttonNewPlaylist.setOnClickListener {
             findNavController().navigate(
                 R.id.action_libraryFragment_to_newPlaylistFragment
@@ -48,15 +51,14 @@ class PlaylistsFragment : Fragment() {
         }
 
         viewModel.playlists.observe(viewLifecycleOwner) { playlists ->
-            playlistAdapter = PlaylistAdapter(playlists)
-            binding.rvPlaylists.adapter = playlistAdapter
+            playlistAdapter.updatePlaylists(playlists)
         }
     }
 
     private fun setupRecyclerView() {
         val spanCount = 2
         val spacing = resources.getDimensionPixelSize(R.dimen.radius_size_8)
-        val margin = resources.getDimensionPixelSize(R.dimen.element_padding_16)
+        val edgeMargin = resources.getDimensionPixelSize(R.dimen.element_margin_16)
 
         binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), spanCount)
 
@@ -69,16 +71,27 @@ class PlaylistsFragment : Fragment() {
             ) {
                 val position = parent.getChildAdapterPosition(view)
                 val column = position % spanCount
+                val totalItems = parent.adapter?.itemCount ?: 0
+                val isLastRow = position >= totalItems - spanCount
 
-                if (column == 0) {
-                    outRect.left = 0
-                    outRect.right = spacing / 2
-                } else {
-                    outRect.left = spacing / 2
-                    outRect.right = 0
+                when (column) {
+                    0 -> {
+                        outRect.left = edgeMargin
+                        outRect.right = spacing / 2
+                    }
+                    1 -> {
+                        outRect.left = spacing / 2
+                        outRect.right = edgeMargin
+                    }
                 }
 
-                outRect.top = if (position < spanCount) 0 else spacing
+                if (position < spanCount) {
+                    outRect.top = edgeMargin
+                    outRect.bottom = spacing
+                } else {
+                    outRect.top = spacing
+                    outRect.bottom = if (isLastRow) 0 else spacing / 2
+                }
             }
         })
     }

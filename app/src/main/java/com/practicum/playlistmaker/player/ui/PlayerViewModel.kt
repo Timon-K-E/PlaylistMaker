@@ -48,11 +48,9 @@ class PlayerViewModel(
     private val favoriteStateLiveData = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = favoriteStateLiveData
 
-    // LiveData для списка плейлистов
     private val _playlists = MutableLiveData<List<Playlist>>(emptyList())
     val playlists: LiveData<List<Playlist>> = _playlists
 
-    // Метод для загрузки плейлистов
     fun loadPlaylists() {
         viewModelScope.launch {
             playlistInteractor.getPlaylists()
@@ -61,7 +59,6 @@ class PlayerViewModel(
                 }
         }
     }
-    // =====================================
 
     init {
         trackLiveData.value = track

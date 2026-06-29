@@ -141,7 +141,6 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
 
         val textView = layout.findViewById<TextView>(R.id.tv_toast_message)
         textView.text = message
-        //textView.textSize = 14f
 
         val toast = Toast(requireContext())
         toast.duration = Toast.LENGTH_LONG

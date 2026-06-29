@@ -29,7 +29,7 @@ class PlaylistAdapter(
 
     override fun getItemCount(): Int = playlists.size
 
-    fun updateData(newPlaylists: List<Playlist>) {
+    fun updatePlaylists(newPlaylists: List<Playlist>) {
         playlists = newPlaylists
         notifyDataSetChanged()
     }
