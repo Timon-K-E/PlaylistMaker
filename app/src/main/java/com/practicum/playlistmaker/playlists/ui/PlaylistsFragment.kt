@@ -1,5 +1,6 @@
-package com.practicum.playlistmaker.library.ui
+package com.practicum.playlistmaker.playlists.ui
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +9,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.practicum.playlistmaker.library.domain.PlaylistsState
+import com.practicum.playlistmaker.playlists.domain.PlaylistsState
+import com.practicum.playlistmaker.playlists.ui.PlaylistAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -62,12 +65,12 @@ class PlaylistsFragment : Fragment() {
 
         binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), spanCount)
 
-        binding.rvPlaylists.addItemDecoration(object : androidx.recyclerview.widget.RecyclerView.ItemDecoration() {
+        binding.rvPlaylists.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(
-                outRect: android.graphics.Rect,
+                outRect: Rect,
                 view: View,
-                parent: androidx.recyclerview.widget.RecyclerView,
-                state: androidx.recyclerview.widget.RecyclerView.State
+                parent: RecyclerView,
+                state: RecyclerView.State
             ) {
                 val position = parent.getChildAdapterPosition(view)
                 val column = position % spanCount
@@ -112,11 +115,6 @@ class PlaylistsFragment : Fragment() {
                 binding.rvPlaylists.isVisible = true
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadPlaylists()
     }
 
     override fun onDestroyView() {

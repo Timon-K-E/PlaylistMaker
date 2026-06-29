@@ -1,10 +1,8 @@
-package com.practicum.playlistmaker.favorite.domain.db
+package com.practicum.playlistmaker.favorite.domain
 
 
-import com.practicum.playlistmaker.favorite.data.db.AppDatabase
 import com.practicum.playlistmaker.favorite.data.db.dao.FavoriteTracksDao
 import com.practicum.playlistmaker.favorite.data.db.TrackDbConvertor
-import com.practicum.playlistmaker.favorite.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.search.domain.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged

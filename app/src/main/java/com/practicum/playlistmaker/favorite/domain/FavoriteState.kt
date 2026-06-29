@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.library.domain
+package com.practicum.playlistmaker.favorite.domain
 
 import com.practicum.playlistmaker.search.domain.Track
 

@@ -4,7 +4,6 @@ import android.app.Application
 import com.practicum.playlistmaker.di.appModule
 import com.practicum.playlistmaker.di.libraryModule
 import com.practicum.playlistmaker.di.playerModule
-import com.practicum.playlistmaker.di.playlistModule
 import com.practicum.playlistmaker.di.viewModelModule
 import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import org.koin.android.ext.koin.androidContext
@@ -22,8 +21,7 @@ class App : Application() {
                 appModule,
                 playerModule,
                 viewModelModule,
-                libraryModule,
-                playlistModule
+                libraryModule
             )
         }
 

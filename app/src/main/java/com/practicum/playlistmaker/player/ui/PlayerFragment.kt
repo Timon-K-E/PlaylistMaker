@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.player.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -16,7 +17,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
+import com.practicum.playlistmaker.playlists.domain.AddTrackResult
 import com.practicum.playlistmaker.playlists.domain.Playlist
+import com.practicum.playlistmaker.utils.showCustomToast
 
 class PlayerFragment : Fragment(R.layout.fragment_player) {
 
@@ -42,7 +45,6 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         setupBottomSheet()
         setupClickListeners()
         setupRecyclerView()
-        loadPlaylists()
     }
 
     override fun onStart() {
@@ -81,7 +83,6 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         binding.addToFavoritesButton.setOnClickListener { viewModel.onFavoriteButtonClicked() }
 
         binding.addToPlaylistButton.setOnClickListener {
-            loadPlaylists()
             toggleBottomSheet()
         }
 
@@ -133,17 +134,17 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         binding.playlistRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         playlistAdapter = PlaylistBottomSheetAdapter(emptyList())
 
-        // Обработчик клика по плейлисту
         playlistAdapter.setOnItemClickListener { playlist ->
-            // TODO: Добавить трек в плейлист
-            // viewModel.addTrackToPlaylist(track, playlist)
-            hideBottomSheet()
+            if (playlist.trackIds.contains(track.trackId)) {
+                showCustomToast(
+                    getString(R.string.track_already_in_playlist, playlist.name)
+                )
+            } else {
+                viewModel.addTrackToPlaylist(track, playlist)
+                hideBottomSheet()
+            }
         }
         binding.playlistRecyclerView.adapter = playlistAdapter
-    }
-
-    private fun loadPlaylists() {
-        viewModel.loadPlaylists()
     }
 
     private fun toggleBottomSheet() {
@@ -183,6 +184,20 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
 
         viewModel.playlists.observe(viewLifecycleOwner) { playlists ->
             updatePlaylists(playlists)
+        }
+
+        viewModel.addTrackStatus.observe(viewLifecycleOwner) { pair ->
+            pair?.let { (result, playlistName) ->
+                when (result) {
+                    AddTrackResult.Success -> {
+                        showCustomToast(
+                            getString(R.string.track_added_to_playlist, playlistName)
+                        )
+                    }
+                    AddTrackResult.AlreadyExists -> {
+                    }
+                }
+            }
         }
     }
 

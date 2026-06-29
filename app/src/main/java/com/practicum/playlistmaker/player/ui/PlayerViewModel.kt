@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackInteractor
+import com.practicum.playlistmaker.favorite.domain.FavoriteTrackInteractor
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.PlayerState
+import com.practicum.playlistmaker.playlists.domain.AddTrackResult
 import com.practicum.playlistmaker.playlists.domain.Playlist
 import com.practicum.playlistmaker.playlists.domain.PlaylistInteractor
 import com.practicum.playlistmaker.search.domain.Track
@@ -51,7 +52,17 @@ class PlayerViewModel(
     private val _playlists = MutableLiveData<List<Playlist>>(emptyList())
     val playlists: LiveData<List<Playlist>> = _playlists
 
-    fun loadPlaylists() {
+    private val _addTrackStatus = MutableLiveData<Pair<AddTrackResult, String>?>(null)
+    val addTrackStatus: LiveData<Pair<AddTrackResult, String>?> = _addTrackStatus
+
+    init {
+        trackLiveData.value = track
+        preparePlayer()
+        subscribeToFavoriteStatus()
+        observePlaylists()
+    }
+
+    private fun observePlaylists() {
         viewModelScope.launch {
             playlistInteractor.getPlaylists()
                 .collectLatest { playlists ->
@@ -59,11 +70,13 @@ class PlayerViewModel(
                 }
         }
     }
-
-    init {
-        trackLiveData.value = track
-        preparePlayer()
-        subscribeToFavoriteStatus()
+    fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        viewModelScope.launch {
+            val result = playlistInteractor.addTrackToPlaylist(track, playlist)
+            _addTrackStatus.postValue(Pair(result, playlist.name))
+            delay(2000)
+            _addTrackStatus.postValue(null)
+        }
     }
 
     private fun preparePlayer() {
@@ -199,7 +212,7 @@ class PlayerViewModel(
         viewModelScope.launch {
             val currentState = favoriteStateLiveData.value ?: false
             if (currentState) {
-                  favoriteTrackInteractor.removeTrackFromFavorites(track)
+                favoriteTrackInteractor.removeTrackFromFavorites(track)
             } else {
                 favoriteTrackInteractor.addTrackToFavorites(track)
             }

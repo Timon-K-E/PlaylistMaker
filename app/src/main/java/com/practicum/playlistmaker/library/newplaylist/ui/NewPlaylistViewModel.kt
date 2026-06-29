@@ -73,6 +73,7 @@ class NewPlaylistViewModel(
                 coverPath = coverPath
             )
 
+            playlistInteractor.createPlaylist(playlist)
 
             _showSuccessToast.postValue("Плейлист $name создан")
             _navigationEvent.postValue(NavigationEvent.NavigateBack)

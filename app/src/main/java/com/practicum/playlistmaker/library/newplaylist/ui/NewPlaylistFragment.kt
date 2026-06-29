@@ -21,6 +21,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentNewPlaylistBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.activity.OnBackPressedCallback
+import com.practicum.playlistmaker.utils.showCustomToast
 
 class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
 
@@ -135,22 +136,6 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
         }
     }
 
-    private fun showCustomToast(message: String) {
-        val inflater = layoutInflater
-        val layout = inflater.inflate(R.layout.custom_toast_layout, null)
-
-        val textView = layout.findViewById<TextView>(R.id.tv_toast_message)
-        textView.text = message
-
-        val toast = Toast(requireContext())
-        toast.duration = Toast.LENGTH_LONG
-        toast.view = layout
-
-        val offsetPx = (0 * resources.displayMetrics.density).toInt()
-        toast.setGravity(Gravity.BOTTOM, 0, offsetPx)
-
-        toast.show()
-    }
 
     private fun showCoverImage(uri: Uri) {
         binding.albumCover.scaleType = ImageView.ScaleType.CENTER_CROP

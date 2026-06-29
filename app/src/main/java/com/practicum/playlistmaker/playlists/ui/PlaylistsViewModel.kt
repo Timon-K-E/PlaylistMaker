@@ -1,10 +1,10 @@
-package com.practicum.playlistmaker.library.ui
+package com.practicum.playlistmaker.playlists.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.library.domain.PlaylistsState
+import com.practicum.playlistmaker.playlists.domain.PlaylistsState
 import com.practicum.playlistmaker.playlists.domain.Playlist
 import com.practicum.playlistmaker.playlists.domain.PlaylistInteractor
 import kotlinx.coroutines.flow.collectLatest
@@ -21,19 +21,19 @@ class PlaylistsViewModel(
     val playlists: LiveData<List<Playlist>> = _playlists
 
     init {
-        loadPlaylists()
+        observePlaylists()
     }
 
-    fun loadPlaylists() {
+    private fun observePlaylists() {
         viewModelScope.launch {
             playlistInteractor.getPlaylists()
                 .collectLatest { playlists ->
                     _playlists.value = playlists
-                    if (playlists.isEmpty()) {
-                        _state.value = PlaylistsState.Empty
-                    } else {
-                        _state.value = PlaylistsState.Content
-                    }
+                    _state.value =
+                        if (playlists.isEmpty())
+                            PlaylistsState.Empty
+                        else
+                            PlaylistsState.Content
                 }
         }
     }

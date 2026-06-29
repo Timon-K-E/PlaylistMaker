@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.playlists.domain
 
+import com.practicum.playlistmaker.search.domain.Track
 import kotlinx.coroutines.flow.Flow
 
 interface PlaylistInteractor {
@@ -7,4 +8,5 @@ interface PlaylistInteractor {
     suspend fun updatePlaylist(playlist: Playlist)
     fun getPlaylists(): Flow<List<Playlist>>
     suspend fun getPlaylistById(id: Long): Playlist?
+    suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): AddTrackResult
 }

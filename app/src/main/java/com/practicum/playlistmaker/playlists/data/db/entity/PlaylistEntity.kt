@@ -10,6 +10,6 @@ data class PlaylistEntity(
     val name: String,
     val description: String? = null,
     val coverPath: String? = null,
-    val trackIds: String = "[]", // JSON строка
+    val trackIds: String = "[]",
     val trackCount: Int = 0
 )

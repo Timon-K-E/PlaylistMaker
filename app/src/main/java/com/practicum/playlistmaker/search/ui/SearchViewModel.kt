@@ -10,8 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackInteractor
-import kotlinx.coroutines.flow.collect
+import com.practicum.playlistmaker.favorite.domain.FavoriteTrackInteractor
 import kotlinx.coroutines.flow.collectLatest
 
 class SearchViewModel(
