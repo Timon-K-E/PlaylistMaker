@@ -32,9 +32,8 @@ class NewPlaylistViewModel(
     private val _navigationEvent = MutableLiveData<NavigationEvent?>(null)
     val navigationEvent: LiveData<NavigationEvent?> = _navigationEvent
 
-    private val _showSuccessToast = MutableLiveData<String?>(null)
-    val showSuccessToast: LiveData<String?> = _showSuccessToast
-
+    private val _createdPlaylistName = MutableLiveData<String?>(null)
+    val createdPlaylistName: LiveData<String?> = _createdPlaylistName
     private var isDataChanged = false
 
     fun updatePlaylistName(name: String) {
@@ -75,7 +74,7 @@ class NewPlaylistViewModel(
 
             playlistInteractor.createPlaylist(playlist)
 
-            _showSuccessToast.postValue("Плейлист $name создан")
+            _createdPlaylistName.postValue(name)
             _navigationEvent.postValue(NavigationEvent.NavigateBack)
             isDataChanged = false
         }
@@ -121,7 +120,7 @@ class NewPlaylistViewModel(
     }
 
     fun onToastShown() {
-        _showSuccessToast.value = null
+        _createdPlaylistName.value = null
     }
 
     sealed class NavigationEvent {

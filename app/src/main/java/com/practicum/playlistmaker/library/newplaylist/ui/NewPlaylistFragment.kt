@@ -128,9 +128,11 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
             }
         }
 
-        viewModel.showSuccessToast.observe(viewLifecycleOwner) { message ->
-            message?.let {
-                showCustomToast(it)
+        viewModel.createdPlaylistName.observe(viewLifecycleOwner) { playlistName ->
+            playlistName?.let { name ->
+                // Используем getString с форматированием
+                val message = getString(R.string.playlist_created, name)
+                showCustomToast(message)
                 viewModel.onToastShown()
             }
         }
