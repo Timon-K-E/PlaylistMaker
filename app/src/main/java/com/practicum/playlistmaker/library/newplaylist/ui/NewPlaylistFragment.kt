@@ -5,11 +5,9 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +19,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentNewPlaylistBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doOnTextChanged
 import com.practicum.playlistmaker.utils.showCustomToast
 
 class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
@@ -37,7 +36,6 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
     ) { uri: Uri? ->
         uri?.let {
             viewModel.updateCoverUri(it)
-            showCoverImage(it)
         }
     }
 
@@ -75,38 +73,29 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
     }
 
     private fun setupTextWatchers() {
-        binding.titleLayout.editText?.apply {
-            addTextChangedListener(
-                object : android.text.TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                    override fun afterTextChanged(s: android.text.Editable?) {
-                        viewModel.updatePlaylistName(s?.toString() ?: "")
-                    }
-                }
-            )
+        binding.titleLayout.editText?.doOnTextChanged { text, _, _, _ ->
+            viewModel.updatePlaylistName(text?.toString() ?: "")
         }
 
-        binding.descriptionLayout.editText?.apply {
-            addTextChangedListener(
-                object : android.text.TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                    override fun afterTextChanged(s: android.text.Editable?) {
-                        viewModel.updatePlaylistDescription(s?.toString() ?: "")
-                    }
-                }
-            )
+        binding.descriptionLayout.editText?.doOnTextChanged { text, _, _, _ ->
+            viewModel.updatePlaylistDescription(text?.toString() ?: "")
         }
     }
 
     private fun observeViewModel() {
-        viewModel.isCreateButtonEnabled.observe(viewLifecycleOwner) { enabled ->
-            binding.createButton.isEnabled = enabled
-        }
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            binding.createButton.isEnabled = state.isCreateButtonEnabled
 
-        viewModel.coverUri.observe(viewLifecycleOwner) { uri ->
-            uri?.let { showCoverImage(it) }
+            state.coverUri?.let { uri ->
+                showCoverImage(uri)
+            }
+
+            state.createdPlaylistName?.let { name ->
+                val message = getString(R.string.playlist_created, name)
+                showCustomToast(message)
+                viewModel.onToastShown()
+            }
+
         }
 
         viewModel.navigationEvent.observe(viewLifecycleOwner) { event ->
@@ -127,21 +116,10 @@ class NewPlaylistFragment : Fragment(R.layout.fragment_new_playlist) {
                 }
             }
         }
-
-        viewModel.createdPlaylistName.observe(viewLifecycleOwner) { playlistName ->
-            playlistName?.let { name ->
-                // Используем getString с форматированием
-                val message = getString(R.string.playlist_created, name)
-                showCustomToast(message)
-                viewModel.onToastShown()
-            }
-        }
     }
-
 
     private fun showCoverImage(uri: Uri) {
         binding.albumCover.scaleType = ImageView.ScaleType.CENTER_CROP
-
 
         val radius = resources.getDimensionPixelSize(R.dimen.radius_size_8)
 

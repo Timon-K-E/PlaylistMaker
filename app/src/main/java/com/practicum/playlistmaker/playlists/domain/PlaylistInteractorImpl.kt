@@ -34,13 +34,13 @@ class PlaylistInteractorImpl(
         }
     }
 
-    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): AddTrackResult {
+    override suspend fun addTrackToPlaylist(track: Track, playlistId: Long): AddTrackResult {
         return withContext(Dispatchers.IO) {
-            if (playlist.trackIds.contains(track.trackId)) {
-                return@withContext AddTrackResult.AlreadyExists
-            }
+//            if (playlist.trackIds.contains(track.trackId)) {
+//                return@withContext AddTrackResult.AlreadyExists
+//            }
 
-            val success = repository.addTrackToPlaylist(track, playlist)
+            val success = repository.addTrackToPlaylist(track, playlistId)
 
             return@withContext if (success) {
                 AddTrackResult.Success

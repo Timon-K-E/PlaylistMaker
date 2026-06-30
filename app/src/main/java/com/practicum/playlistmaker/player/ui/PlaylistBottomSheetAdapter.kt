@@ -8,6 +8,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistLayoutBinding
 import com.practicum.playlistmaker.playlists.domain.Playlist
+import com.practicum.playlistmaker.utils.dpToPx
 import java.io.File
 
 class PlaylistBottomSheetAdapter(
@@ -58,26 +59,28 @@ class PlaylistBottomSheetAdapter(
                 trackCount
             )
 
+            val radius = binding.root.context.dpToPx(8)
+
             if (!playlist.coverPath.isNullOrEmpty()) {
                 val file = File(playlist.coverPath)
                 if (file.exists()) {
                     Glide.with(binding.root.context)
                         .load(file)
                         .centerCrop()
-                        .transform(RoundedCorners(8))
+                        .transform(RoundedCorners(radius))
                         .into(binding.CoverTack)
                 } else {
                     Glide.with(binding.root.context)
                         .load(R.drawable.ic_placeholder_cover)
                         .centerCrop()
-                        .transform(RoundedCorners(8))
+                        .transform(RoundedCorners(radius))
                         .into(binding.CoverTack)
                 }
             } else {
                 Glide.with(binding.root.context)
                     .load(R.drawable.ic_placeholder_cover)
                     .centerCrop()
-                    .transform(RoundedCorners(8))
+                    .transform(RoundedCorners(radius))
                     .into(binding.CoverTack)
             }
         }

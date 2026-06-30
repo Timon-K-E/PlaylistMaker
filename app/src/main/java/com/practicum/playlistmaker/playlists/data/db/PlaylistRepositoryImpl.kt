@@ -41,8 +41,18 @@ class PlaylistRepositoryImpl(
         return entity?.let { convertor.map(it) }
     }
 
-    override suspend fun addTrackToPlaylist(track: Track, playlist: Playlist): Boolean {
+    override suspend fun addTrackToPlaylist(track: Track, playlistId: Long): Boolean {
         return try {
+
+            val playlistEntity = playlistDao.getPlaylistById(playlistId)
+                ?: return false
+
+            val playlist = convertor.map(playlistEntity)
+
+            if (playlist.trackIds.contains(track.trackId)) {
+                return false
+            }
+
             val trackEntity = TrackInPlaylistEntity(
                 trackId = track.trackId,
                 trackName = track.trackName,

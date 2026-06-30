@@ -19,62 +19,58 @@ class NewPlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
-    private val _playlistName = MutableLiveData("")
-
-    private val _playlistDescription = MutableLiveData("")
-
-    private val _coverUri = MutableLiveData<Uri?>(null)
-    val coverUri: LiveData<Uri?> = _coverUri
-
-    private val _isCreateButtonEnabled = MutableLiveData(false)
-    val isCreateButtonEnabled: LiveData<Boolean> = _isCreateButtonEnabled
+    private val _state = MutableLiveData(NewPlaylistState())
+    val state: LiveData<NewPlaylistState> = _state
 
     private val _navigationEvent = MutableLiveData<NavigationEvent?>(null)
     val navigationEvent: LiveData<NavigationEvent?> = _navigationEvent
-
-    private val _createdPlaylistName = MutableLiveData<String?>(null)
-    val createdPlaylistName: LiveData<String?> = _createdPlaylistName
     private var isDataChanged = false
 
     fun updatePlaylistName(name: String) {
-        _playlistName.value = name
+        val currentState = _state.value ?: return
+        _state.value = currentState.copy(
+            name = name,
+            isCreateButtonEnabled = name.isNotBlank()
+        )
         isDataChanged = true
-        updateCreateButtonState()
     }
 
     fun updatePlaylistDescription(description: String) {
-        _playlistDescription.value = description
+        val currentState = _state.value ?: return
+        _state.value = currentState.copy(description = description)
         isDataChanged = true
     }
 
     fun updateCoverUri(uri: Uri?) {
-        _coverUri.value = uri
+        val currentState = _state.value ?: return
+        _state.value = currentState.copy(coverUri = uri)
         isDataChanged = true
     }
 
-    private fun updateCreateButtonState() {
-        val name = _playlistName.value ?: ""
-        _isCreateButtonEnabled.value = name.isNotBlank()
-    }
-
     fun onCreatePlaylistClicked(context: Context) {
-        val name = _playlistName.value ?: return
-        if (name.isBlank()) return
+        val currentState = _state.value ?: return
+        if (currentState.name.isBlank()) return
 
         viewModelScope.launch {
-            val coverPath = _coverUri.value?.let { uri ->
+            _state.value = _state.value?.copy(isLoading = true)
+
+            val coverPath = currentState.coverUri?.let { uri ->
                 saveImageToInternalStorage(context, uri)
             }
 
             val playlist = Playlist(
-                name = name,
-                description = _playlistDescription.value?.takeIf { it.isNotBlank() },
+                name = currentState.name,
+                description = currentState.description.takeIf { it.isNotBlank() },
                 coverPath = coverPath
             )
 
             playlistInteractor.createPlaylist(playlist)
 
-            _createdPlaylistName.postValue(name)
+            _state.value = _state.value?.copy(
+                createdPlaylistName = currentState.name,
+                isLoading = false
+            )
+
             _navigationEvent.postValue(NavigationEvent.NavigateBack)
             isDataChanged = false
         }
@@ -120,7 +116,8 @@ class NewPlaylistViewModel(
     }
 
     fun onToastShown() {
-        _createdPlaylistName.value = null
+        val currentState = _state.value ?: return
+        _state.value = currentState.copy(createdPlaylistName = null)
     }
 
     sealed class NavigationEvent {

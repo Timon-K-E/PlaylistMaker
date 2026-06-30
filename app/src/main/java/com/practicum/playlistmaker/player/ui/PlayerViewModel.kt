@@ -72,7 +72,7 @@ class PlayerViewModel(
     }
     fun addTrackToPlaylist(track: Track, playlist: Playlist) {
         viewModelScope.launch {
-            val result = playlistInteractor.addTrackToPlaylist(track, playlist)
+            val result = playlistInteractor.addTrackToPlaylist(track, playlist.id)
             _addTrackStatus.postValue(Pair(result, playlist.name))
             delay(2000)
             _addTrackStatus.postValue(null)
