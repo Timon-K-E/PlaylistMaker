@@ -5,7 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/button_new_playlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/new_playlist"
+        style="@style/ButtonNewPlaylist" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_playlists"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/element_padding_16"
+
+        android:visibility="visible"
+        tools:visibility="visible"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_playlist"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:spanCount="2">
+    </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/placeholder_container"
@@ -13,15 +35,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:visibility="visible">
-
-        <Button
-            android:id="@+id/button_new_playlist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/new_playlist"
-            style="@style/ButtonNewPlaylist" />
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/placeholder_image"

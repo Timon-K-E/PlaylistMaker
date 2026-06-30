@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/newPlaylistFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:fitsSystemWindows="true"
+    android:theme="@style/Theme.PlaylistMaker">
+
+    <Button
+        android:id="@+id/backButton"
+        style="@style/ButtonBack"
+        android:layout_marginStart="@dimen/element_margin_16"
+        android:layout_marginTop="@dimen/element_margin_14"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titlePlaylist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/element_margin_16"
+        android:fontFamily="@font/ys_display_medium"
+        android:text="@string/new_playlist"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="@dimen/text_size_22"
+        app:layout_constraintBottom_toBottomOf="@id/backButton"
+        app:layout_constraintStart_toEndOf="@id/backButton"
+        app:layout_constraintTop_toTopOf="@id/backButton" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/createButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/backButton">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/leftGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/element_margin_24" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/rightGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/element_margin_24" />
+
+            <FrameLayout
+                android:id="@+id/coverContainer"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/element_margin_26"
+                android:background="@drawable/frame_dashed"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="@id/rightGuideline"
+                app:layout_constraintStart_toStartOf="@id/leftGuideline"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/albumCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="center"
+                                        android:src="@drawable/ic_add_photo_100_100" />
+
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/fieldsContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/element_padding_16"
+                android:paddingTop="@dimen/element_padding_33"
+                android:paddingBottom="@dimen/element_padding_16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/coverContainer">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/titleLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/playlist_name_hint"
+                    style="@style/TextInputLayoutStyle"
+                    app:placeholderTextColor="?attr/colorOnSurface"
+                    app:hintTextAppearance="@style/HintTextStyle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        style="@style/TextInputEditTextTitleStyle"
+                        tools:text="Пример текста" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/descriptionLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:hint="@string/playlist_description_hint"
+                    style="@style/TextInputLayoutStyle"
+                    app:hintTextAppearance="@style/HintTextStyle">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        style="@style/TextInputEditTextDescriptionStyle"
+                        tools:text="Пример текста Пример текста Пример текста Пример текста
+                        1111111111111111111111111111111111111111111111111111111111111111111
+                        1111111111111111111111111111111111111111111111111111111111111111111
+                        1111111111111111111111111111111111111111111111111111111111111111111
+                        1111111111111111111111111111111111111111111111111111111111111111111
+                        11111111111111111111111111111111000000000000000000000000000000000000
+                        000000000000000000000000000000000" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/createButton"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/layout_height_44"
+        android:layout_marginHorizontal="@dimen/element_margin_16"
+        android:layout_marginBottom="@dimen/element_margin_32"
+        android:background="@drawable/tap_selector"
+        android:enabled="false"
+        app:backgroundTint="@null"
+        android:text="@string/create_button"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_16"
+        android:fontFamily="@font/ys_display_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

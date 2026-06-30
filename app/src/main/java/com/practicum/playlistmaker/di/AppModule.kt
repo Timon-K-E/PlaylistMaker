@@ -6,15 +6,22 @@ import android.media.MediaPlayer
 import androidx.room.Room
 import com.google.gson.Gson
 import com.practicum.playlistmaker.favorite.data.db.AppDatabase
+import com.practicum.playlistmaker.favorite.data.db.MIGRATION_1_2
+import com.practicum.playlistmaker.favorite.data.db.MIGRATION_2_3
 import com.practicum.playlistmaker.favorite.data.db.TrackDbConvertor
-import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackInteractor
-import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackRepository
-import com.practicum.playlistmaker.favorite.domain.db.FavoriteTracksInteractorImpl
-import com.practicum.playlistmaker.favorite.domain.db.FavoriteTracksRepositoryImpl
+import com.practicum.playlistmaker.favorite.domain.FavoriteTrackInteractor
+import com.practicum.playlistmaker.favorite.domain.FavoriteTrackRepository
+import com.practicum.playlistmaker.favorite.domain.FavoriteTracksInteractorImpl
+import com.practicum.playlistmaker.favorite.domain.FavoriteTracksRepositoryImpl
 import com.practicum.playlistmaker.player.data.PlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.PlayerInteractorImpl
 import com.practicum.playlistmaker.player.domain.PlayerRepository
+import com.practicum.playlistmaker.playlists.data.db.PlaylistRepositoryImpl
+import com.practicum.playlistmaker.playlists.data.db.PlaylistDbConvertor
+import com.practicum.playlistmaker.playlists.domain.PlaylistInteractor
+import com.practicum.playlistmaker.playlists.domain.PlaylistInteractorImpl
+import com.practicum.playlistmaker.playlists.domain.PlaylistRepository
 import com.practicum.playlistmaker.search.data.ITunesApiService
 import com.practicum.playlistmaker.search.data.NetworkClient
 import com.practicum.playlistmaker.search.data.RetrofitNetworkClient
@@ -77,13 +84,21 @@ val appModule = module {
     factory<PlayerInteractor> { PlayerInteractorImpl(get()) }
 
     single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "database.db"
+        )
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
     }
 
     single { get<AppDatabase>().favoriteTracksDao() }
+    single { get<AppDatabase>().playlistDao() }
+    single { get<AppDatabase>().trackInPlaylistDao() }
 
-    factory { TrackDbConvertor() }
+    single { TrackDbConvertor() }
+    single { PlaylistDbConvertor(get()) }
 
     single<FavoriteTrackRepository> {
         FavoriteTracksRepositoryImpl(
@@ -92,9 +107,18 @@ val appModule = module {
         )
     }
 
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(
+            playlistDao = get(),
+            trackInPlaylistDao = get(),
+            convertor = get(),
+            gson = get()
+        )
+    }
 
     single<FavoriteTrackInteractor> {
         FavoriteTracksInteractorImpl(get())
     }
 
+    single<PlaylistInteractor> { PlaylistInteractorImpl(get()) }
 }

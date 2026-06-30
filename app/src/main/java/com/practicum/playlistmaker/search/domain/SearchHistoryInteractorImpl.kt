@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.search.domain
 
-import com.practicum.playlistmaker.favorite.domain.db.FavoriteTrackInteractor
+import com.practicum.playlistmaker.favorite.domain.FavoriteTrackInteractor
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.flow.first
 

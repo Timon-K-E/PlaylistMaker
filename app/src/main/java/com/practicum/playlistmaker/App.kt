@@ -21,7 +21,7 @@ class App : Application() {
                 appModule,
                 playerModule,
                 viewModelModule,
-                libraryModule,
+                libraryModule
             )
         }
 

@@ -48,5 +48,26 @@
     <string name="no_playlists_message">Вы не создали\nни одного плейлиста</string>
     <string name="no_favorites_message">Ваша медиатека пуста</string>
 
+    <string name="playlist_name_hint">Название*</string>
+    <string name="playlist_description_hint">Описание</string>
+    <string name="create_button">Создать</string>
+    <string name="playlist_created_message">Плейлист %s создан</string>
+    <string name="playlist_creation_error">Ошибка при создании плейлиста</string>
+    <string name="exit_confirmation_title">Завершить создание плейлиста?</string>
+    <string name="exit_confirmation_message">Все несохраненные данные будут потеряны</string>
+    <string name="exit_button">Завершить</string>
+    <string name="cancel_button">Отмена</string>
+
+    <string name="stub_playlist_name">Название плейлиста222222222222222222222222222222222222222222222222222222222222222222</string>
+    <string name="stub_number_of_tracks">0 треков</string>
+    <string name="exit_playlist_dialog_title">Завершить создание плейлиста?</string>
+    <string name="exit_playlist_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="exit_playlist_dialog_confirm">Завершить</string>
+    <string name="exit_playlist_dialog_cancel">Отмена</string>
+
+    <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="track_added_to_playlist">Добавлено в плейлист «%s»</string>
+    <string name="track_already_in_playlist">Трек уже добавлен в плейлист «%s»</string>
+    <string name="playlist_created">Плейлист %1$s создан</string>
 
 </resources>
